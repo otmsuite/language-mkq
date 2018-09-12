@@ -1,0 +1,353 @@
+# TextMate tutorial: http://manual.macromates.com/en/language_grammars
+
+# Regex to convert keys to unquoted: '(include|match|captures|begin|end|beginCaptures|endCaptures|name|patterns|0|1|2|3|4|5|6|7|8|9|comment|fileTypes|scopeName|repository|contentName|firstLineMatch|foldingStartMarker|foldingStopMarker)':
+
+scopeName: 'source.mkq' # <scope> should be a short, unique indicator for the language ("js", "php", "c", etc.)
+name: 'mkq' # The title that will show up in grammar selection and on your status bar.
+fileTypes: [ # An array of file extensions.
+  'mkq'
+  'mkp'
+  'etq'
+  'act'
+  'scr'
+  'myo'
+]
+foldingStartMarker: '(<<)' # A regular expression that checks for the start of a foldable area (such as `{`).
+foldingStopMarker: '(>>)' # A regular expression that checks for the end of a foldable area (such as `}`). If both folding markers are matched in the same line, there will be no foldable area.
+patterns: [ # An array of individual pattern declarations.
+  {
+    match: '[\\;\\:\\^]' # A regular expression that matches some content. Optional
+    name: 'keyword.separadores.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+  }
+  {
+    include: '#eot'
+  }
+  {
+    include: '#etx'
+  }
+  {
+    include: '#bel'
+  }
+  {
+    include: '#bs'
+  }
+  {
+    include: '#vt'
+  }
+  {
+    include: '#enq'
+  }
+  # {
+  #   include:'#numericos'
+  # }
+  {
+    match: '((@>)(SQL|MKQ|MKP|MKPT|EXE|XLS|GRF|ARQ|EML|WWW|WSV|CAB|DFM))' # A regular expression that matches some content. Optional
+    name: 'keyword.control.comandos.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+  }
+  {
+    include: '#tags'
+  }
+  {
+    include: '#comentario'
+  }
+  {
+    include: '#aspas-duplas'
+  }
+  {
+    include : '#aspas-simples'
+  }
+  {
+    include: '#parameter-id'
+  }
+  {
+    include: '#parameter-text'
+  }
+  {
+    include: '#condicional'
+  }
+  {
+    include:'#format'
+  }
+  {
+    match:'(\\+>)'
+    name:'keyword.vdd.mkq'
+  }
+]
+repository:{ # An array of rules. If you're going to be referencing one bit of code over and over again, stick it here so that you can edit all in one place.
+  'tags':
+      match: '\\b(MKQ|PAP|ETQ|QTD|MRG|LEI|PDF|CAR|EDT|VDD|TIT|CAB|COR|DEF|DIM|OPC|OPP|PAR|FOG|MSI|MII|MFI|MSF|MIF|MFF|PLE|PLI|PLF|SQL|SQE|GRD|PRE)\\b'
+      name: 'keyword.control.tags.mkq'
+  'comentario':
+      begin: '(\\-\\-)'
+      end: '($)'
+      name: 'comment.line.double-dash.mkq'
+      patterns: [
+        {
+          include: '#eot'
+        }
+        {
+          include: '#etx'
+        }
+        {
+          include: '#bel'
+        }
+        {
+          include: '#bs'
+        }
+        {
+          include: '#vt'
+        }
+        {
+          include: '#enq'
+        }
+      ]
+  'aspas-duplas':
+      begin: '\\"'
+      end: '\\"'
+      name: 'keyword.delimiter.aspas-duplas.mkq'
+      patterns: [
+        {
+          include: '#parameter-id'
+        }
+        {
+          include: '#parameter-text'
+        }
+        {
+          include: '#eot'
+        }
+        {
+          include: '#etx'
+        }
+        {
+          include: '#bel'
+        }
+        {
+          include: '#bs'
+        }
+        {
+          include: '#vt'
+        }
+        {
+          include: '#enq'
+        }
+        {
+          include: '#comentario'
+        }
+      ]
+  'aspas-simples':
+      begin: '(\')'
+      end: '(\')'
+      name: 'keyword.delimiter.aspas-simples.mkq'
+      patterns: [
+        {
+          include: '#parameter-id'
+        }
+        {
+          include: '#parameter-text'
+        }
+        {
+          include: '#format'
+        }
+        {
+          include: '#eot'
+        }
+        {
+          include: '#etx'
+        }
+        {
+          include: '#bel'
+        }
+        {
+          include: '#bs'
+        }
+        {
+          include: '#vt'
+        }
+        {
+          include: '#enq'
+        }
+        {
+          include: '#comentario'
+        }
+      ]
+  'parameter-text':
+      begin: '(\\{\\[)'
+      # end: '(\\]\\}|$)'
+      end: '(\\]\\})'
+      name: 'variable.parametro.text.mkq'
+      patterns: [
+          {
+            include: '#eot'
+          }
+          {
+            include: '#etx'
+          }
+          {
+            include: '#bel'
+          }
+          {
+            include: '#bs'
+          }
+          {
+            include: '#vt'
+          }
+          {
+            include: '#enq'
+          }
+          {
+            include: '#aspas-simples'
+          }
+          {
+            include: '#aspas-duplas'
+          }
+          {
+            include: '#comentario'
+          }
+      ]
+
+    'parameter-id':
+        begin: '(\\[)'
+        # end: '(\\]|$)'
+        end: '(\\])'
+        name: 'variable.parametro.id.mkq'
+        patterns: [
+          {
+            include: '#tags'
+          }
+          {
+            include: '#eot'
+          }
+          {
+            include: '#etx'
+          }
+          {
+            include: '#bel'
+          }
+          {
+            include: '#bs'
+          }
+          {
+            include: '#vt'
+          }
+          {
+            include: '#enq'
+          }
+          {
+            include: '#aspas-simples'
+          }
+          {
+            include: '#aspas-duplas'
+          }
+          {
+            include: '#comentario'
+          }
+        ]
+    'condicional':
+        begin: '(#>|##>)'
+        end: '(<#{1,2})'
+        name: 'keyword.conditional.mkq'
+        patterns: [
+          {
+            include:'#parameter-text'
+          }
+          {
+            include:'#parameter-id'
+          }
+          {
+            include:'#format'
+          }
+          {
+            include: '#eot'
+          }
+          {
+            include: '#etx'
+          }
+          {
+            include: '#bel'
+          }
+          {
+            include: '#bs'
+          }
+          {
+            include: '#vt'
+          }
+          {
+            include: '#enq'
+          }
+          {
+            include: '#aspas-simples'
+          }
+          {
+            include: '#aspas-duplas'
+          }
+          {
+            include: '#comentario'
+          }
+        ]
+    'format':
+        begin: '(\\{+[^\\[])'
+        # end: '([^\\]]\\}+|$)'
+        end: '([^\\]]\\}+)'
+        # match: '(\\{+[^\\[])([^\'\\"\\}]*)([^\\]]\\}+|$)'
+        name: 'keyword.delimiter.format.mkq'
+        patterns: [
+          {
+            include: '#parameter-text'
+          }
+          {
+            include: '#parameter-id'
+          }
+          {
+            include: '#eot'
+          }
+          {
+            include: '#etx'
+          }
+          {
+            include: '#bel'
+          }
+          {
+            include: '#bs'
+          }
+          {
+            include: '#vt'
+          }
+          {
+            include: '#enq'
+          }
+          {
+            include: '#aspas-simples'
+          }
+          {
+            include: '#aspas-duplas'
+          }
+          {
+            include: '#comentario'
+          }
+        ]
+      'numericos':
+          match: '(\\.|\\,)*([0-9])+(\\.|\\,)*'
+          name: 'keyword.numeric.decimal.mkq'
+      'eot':
+             match: '[\u0004]' # A regular expression that matches some content. Optional
+             name: 'inv.character.eot.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+       'etx':
+            match: '[\u0003]' # A regular expression that matches some content. Optional
+            name: 'inv.character.etx.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+
+      'bel':
+            match: '[\u0007]' # A regular expression that matches some content. Optional
+            name: 'inv.character.bel.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+
+      'bs':
+            match: '[\u0008]' # A regular expression that matches some content. Optional
+            name: 'inv.character.bs.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+
+      'vt':
+            match: '[\u000B]' # A regular expression that matches some content. Optional
+            name: 'inv.character.vt.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+
+      'enq':
+            match: '[\u0005]' # A regular expression that matches some content. Optional
+            name: 'inv.character.enq.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+}

@@ -1,0 +1,9 @@
+'.source.mkq':
+  'editor':
+    'autoIndentOnPaste': false
+    'commentStart': '-- '
+    'softTab': false
+    'tabLength': 4
+    'tabType': 'hard'
+    'increaseIndentPattern': '^\\s*<<.*$'
+    'decreaseIndentPattern': '^\\s*>>.*$'

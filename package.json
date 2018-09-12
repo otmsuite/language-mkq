@@ -1,0 +1,17 @@
+{
+  "name": "language-mkq",
+  "main": "./lib/language-mkq",
+  "version": "1.0.1",
+  "description": "Um pacote voltado à linguagem de MKQs da OTMSuíte",
+  "keywords": [
+    "MKQ",
+    "OTMSuíte",
+    "Suíte",
+    "OTM"
+  ],
+  "repository": "https://github.com/otm-jschmidt/language-mkq",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0"
+  }
+}

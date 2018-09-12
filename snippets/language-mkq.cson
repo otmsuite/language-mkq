@@ -1,0 +1,1115 @@
+'.source.mkq':
+  '[CAB]':
+    'prefix': 'cab'
+    'body': '[CAB]\n${1:Cabeçalho}\n$0'
+    'description': """
+    Pode receber parâmetros e é utilizada para encabeçar a tabela de dados (e o título do relatório impresso).
+    Caso não informada, [CAB] assume o conteúdo definido na tag [TIT].
+    Se o texto de [CAB] iniciar com @@, a barra de busca da janela contendo os dados resultantes do script definido em [SQL] será subtraída (bem como os respectivos botões).
+    Caso inicie com @@@, além da barra, a linha contadora de registros (do rodapé) também será suprimida.
+
+    Exemplo:
+      [CAB]
+      @@@Relação de Itens
+    """
+
+  '[CAR]':
+    'prefix': 'car'
+    'body': '[CAR]\n${1:#L}\n${2:#T}\n${3:#R}\n${4:Cabeçalho do PDF}\n$0'
+    'description': """
+    Define o que deve ser impresso no cabeçalho/rodapé da(s) página(s) do arquivo PDF.
+    A fonte utilizada será, caso não estabelecida em um comando select , a mesma definida para o rodapé.
+    Para imprimir em todas as páginas, o conteúdo deve ser precedido pelo caracter *.
+
+    Três metacomandos estão disponíveis: #L, #T, #R
+
+    *#L - Imprime logotipo padrão no cabeçalho, em todas as páginas
+    *#T - Imprime título padrão no cabeçalho, em todas as páginas
+    *#R - Imprime rodapé padrão, em todas as páginas
+
+    Exemplo:
+      [CAR]
+    *#L --- Imprime logotipo padrão no cabeçalho, em todas as páginas
+    *#T --- Imprime título padrão no cabeçalho, em todas as páginas
+    *#R --- Imprime rodapé padrão, em todas as páginas
+    Número de linhas a serem impressas: [LINHAS]
+    Opção: {[OPP]}
+    *select to_char(sysdate,'dd/mm/yyyy HH24:mi') "YY#32", rownum "XX#15" from dual connect by level <4
+    """
+
+  '[COR]':
+    'prefix': 'cor'
+    'body': '[COR]\n${1:225}-${2:230}-${3:245}/${4:030}-${5:70}-${6:120}\n$0'
+    'description': """
+    Opcional (normalmente não usada - assumindo, portanto, as cores padrões).
+    Quando utilizada, altera as cores do cabeçalho e rodapé, conforme degradê do primeiro RGB para o segundo RGB.
+
+    Default:
+    225-230-245/030-70-120
+
+    Exemplo:
+      [COR]
+      198-224-180/000-080-000
+    """
+
+  '[DEF]':
+    'prefix': 'def'
+    'body': '[DEF]\n[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
+    'description': """
+    Permite definirmos parâmetros para substituição em todo MKQ.
+    Deve ser a primeira TAG definida no MKQ e seus identificadores seguem o padrão de parâmetros externos: [$IDENTIFICADOR$].
+
+    Sintaxe:
+      Identificador : Conteúdo
+
+    Exemplo:
+      [DEF]
+      --Define o [$PAR1$]
+      [$PAR1$] : [PARAMETRO1]: Label: TX250: 100: Default
+
+      [PAR]
+      --Substituirá pelo conteúdo definido na tag [DEF]
+      [$PAR1$]
+    """
+
+    'linha [DEF]':
+      'prefix': 'def+'
+      'body': '[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
+      'description': """
+      Permite definirmos parâmetros para substituição em todo MKQ.
+      Deve ser a primeira TAG definida no MKQ e seus identificadores seguem o padrão de parâmetros externos: [$IDENTIFICADOR$].
+
+      Sintaxe:
+        Identificador : Conteúdo
+
+      Exemplo:
+        [DEF]
+        --Define o [$PAR1$]
+        [$PAR1$] : [PARAMETRO1]: Label: TX250: 100: Default
+
+        [PAR]
+        --Substituirá pelo conteúdo definido na tag [DEF]
+        [$PAR1$]
+      """
+
+  '[DIM]':
+    'prefix': 'dim'
+    'body': '[DIM]\n${1:75}:${2:0}:${3:0}:${4:25}:${5:70}:${6:15}\n$0'
+    'description': """
+    Esta tag define a área útil da tela a ser utilizada pelo MKQ (além de definir o comportamento do grid da tabela de dados).
+    É opcional e pode receber SEIS parâmetros separados por dois pontos.
+
+    Default:
+    75 : 0 : 0 : 25 : 70 : 15
+
+    DETALHE:
+
+    • O primeiro paramêtro define o percentual da largura da tela que deverá ser utilizado pelo formulário do Janela Opções (nossa sugestão é 98)
+    • O segundo parâmetro indica se a largura das colunas serão proporcionalizadas nesta tela ou se deverão ser fixas com aplicação de barra de rolagem horizontal, se necessário.
+      Quando este valor for "0" (zero) as colunas serão proporcionalizadas.
+      Quando este valor for maior que zero (normalmente usamos 15) a largura das colunas será resultante da multiplicação da largura definida nos labels do [SQL] por este fator informado (no caso, 15)
+      e uma barra de rolagem horizontal poderá ser apresentada (se necessário)
+    • O terceiro parâmetro só é considerado se o segundo parâmetro for diferente de zero.
+      Este parâmetro indica o número de colunas a fixar na lateral esquerda.
+      Lembre que as colunas ocultas (com dimensão ZERO, caso existam) também devem ser contadas.
+    • O quarto parâmetro, opcionalmente, a altura das linhas da table. Nosso default é 25 (valor assumido quando parâmetro não for informado).
+      A alteração da altura pode ser útil quando há necessidade de apresentar imagens/desenhos como informação resultante do [SQL]
+    • O quinto paramêtro define, opcionalmente, o percentual da altura da tela que deverá ser utilizado pelo formulário do Janela Opções
+      Se for menor do que 70 (padrão) a tela será centralizada verticalmente.
+    • O sexto define, opcionalmente, a espessura a ser aplicada em caso de barras de rolagem no GRID de dados, se não for informado, assume 15 (padrão).
+    Exemplo:
+      [DIM]
+      98 : 15 : 4 : 60
+    """
+
+  '[EDT]':
+    'prefix': 'edt'
+    'body': '[EDT]\n$0'
+    'description': """
+    Esta tag permite definir regras de edição de colunas na tela de grid.
+    A sintaxe básica segue o padrão
+    ID : TYPE : LENGTH : PARAMETERS : TABLE_NAME : COLUMN_NAME : USER_DESCRIPTION : REFRESH
+    mas seu conteúdo varia de acordo com o tipo de dado da coluna a ser editada (FL, CK, FK, DT, TX, NM, DC, PW, XX).
+
+    Exemplo:
+      [EDT]
+      1 : TX   : 100  :    : TMP_TESTE_EDT : TEXTO  : Texto : R
+    """
+
+  'FK [EDT]':
+    'prefix': 'edtfk'
+    'body': '${1:ID}:\t FK: ${2: ;S}:\t\t\t\t${3:Tabela}\n\t\t\t\t\t\t\t; ${4:Colunas Lov}\n\t\t\t\t\t\t\t; ${5:PK}||chr(9)||${6:Descrição}${7:;WHERE}\n\t\t\t\t\t\t\t: ${8:TABLE_NAME}:${9:COLUMN_NAME}:${10:USER_DESCRIPTION}:${11:R}\n$0'
+    'description': 'Campo editável tipo lista de valores de uma tabela (grid).'
+
+  'NM [EDT]':
+    'prefix': 'edtnm'
+    'body': '${1:ID}:\t NM: ${2:Número de Casas Decimais} ${3:;S}:\t ${4:Valor Mínimo};${5:Valor Máximo}:\t ${6:TABLE_NAME}:${7:COLUMN_NAME}:${8:USER_DESCRIPTION}:${9:R}\n$0'
+    'description': 'Campo editável tipo numérico.'
+
+  'TX [EDT]':
+    'prefix': 'edttx'
+    'body': '${1:ID}:\t TX: ${2:Comprimento Máximo} ${3:;S}:\t :${4:TABLE_NAME}:${5:COLUMN_NAME}:${6:USER_DESCRIPTION}:${7:R}\n$0'
+    'description': 'Campo editável tipo texto.'
+
+  'DT [EDT]':
+    'prefix': 'edtdt'
+    'body': '${1:ID}:\t DT: ${3:;S}: ${4:N;} ${5:Data Inicial}; ${6:Data Final} ${7:;WHERE}\t :${8:TABLE_NAME}:${9:COLUMN_NAME}:${10:USER_DESCRIPTION}:${11:R}\n$0'
+    'description': 'Campo editável tipo data.'
+
+  'CK [EDT]':
+    'prefix': 'edtck'
+    'body': '${1:ID}:\t CK: :${2:IDTRUE};${3:IDFALSE};${4:#IMG^%D/Sinal_VDE};${5:#IMG^%D/Sinal_VRM}\t :${6:TABLE_NAME}:${7:COLUMN_NAME}:${8:USER_DESCRIPTION}:${9:R}\n$0'
+    'description': 'Campo editável tipo check-box.'
+
+  'DC [EDT]':
+    'prefix': 'edtdc'
+    'body': '${1:ID}:\t DC: :${2:ID1};${3:Texto1};${4:ID2};${5:Texto2};${6:ID0};${7:Texto0}\t :${8:TABLE_NAME}:${9:COLUMN_NAME}:${10:USER_DESCRIPTION}:${11:R}\n$0'
+    'description': 'Campo editável tipo lista de opções.'
+
+  '[GRD]':
+    'prefix': 'grd'
+    'body': '[GRD]\n[FC]:${2:Tahoma}-${3:0}-${4:12}\n[FT]:${2:Tahoma}-${3:0}-${4:12}\n${5:[1]: Itens}\n$0'
+    'description': """
+    Esta tag permite redefinir a fonte padrão do cabeçalho do grid de dados (resultante da tag [SQL]) e/ou definir cabeçalhos com múltiplas linhas (agrupamento).
+    As subtags [FT] e [FC] permitem definir as fontes a serem utilizadas para o cabeçalho do grid de dados (tag [SQL]) e do grid de cabeçalho (comando UNION_TABLE da tag [SQL]).
+    Caso a fonte não seja não definida (tanto na subtag [FT] quanto na [FC]), o padrão assumido será Tahoma-0-12.
+    As subtags de fontes seguem o padrão Nome da fonte-Tipo (0=Normal, 1=Negrito, 2=Itálico, 3=Ambos)-Tamanho.
+
+    Exemplo:
+      [GRD]
+      [FT]: Courier New-2-10
+      [FC]: Courier New-2-10
+      [01]: Quantidade
+
+      [SQL]
+      select rownum "Cod#10", 'Item '||rownum "Descrição#30",
+           1 "Valor#N10@S",
+           2 "[01]Venda#N10@S",
+           3 "[01]Compra#N10@S"
+      from dual
+    """
+
+  '[MFF]':
+    'prefix': 'mff'
+    'body': '[MFF]\n${1:Mensagem}\n$0'
+    'description': """
+    Mensagem a ser apresentada após a execução de [PLF].
+    Caso seja necessário que a mensagem seja exibida somente após o clique em algum botão do grid, o [PLE] se faz necessário.
+
+    Exemplo:
+      [MFF]
+      #> '[OPC]'='OPC01' <#
+      Ação executada com sucesso!
+    """
+
+  '[MFI]':
+    'prefix': 'mfi'
+    'body': '[MFI]\n${1:Mensagem}\n$0'
+    'description': """Mensagem condicional a ser executada antes da execução de [PLF].
+    Caso seja necessário que a mensagem seja exibida somente após o clique em algum botão do grid, o [PLE] se faz necessário.
+
+    Exemplo:
+      [MFI]
+      #> '[OPC]'='OPC01' <#
+      Executar ação selecionada?
+    """
+
+  '[MIF]':
+    'prefix': 'mif'
+    'body': '[MIF]\n${1:Mensagem}\n$0'
+    'description': 'Mensagem apresentada após a execução de [PLI].'
+
+  '[MII]':
+    'prefix': 'mii'
+    'body': '[MII]\n${1:Mensagem}\n$0'
+    'description': """Mensagem condicional apresentada antes da execução de [PLI].'
+
+    Exemplo: [MII]
+    #> instr('[$$$]', '$$$') = 0 and '[$$$]'<>'0' and '[OPP]'='OPC02' <#
+    Confirma atualização de registro?
+    """
+
+  '[MSF]':
+    'prefix': 'msf'
+    'body': '[MSF]\n${1:Mensagem}\n$0'
+    'description': """Mensagem a ser apresentada após a execução de [PLF].
+    Caso seja necessário que a mensagem seja exibida somente após o clique em algum botão do grid,
+    o [PLE] se faz necessário..'
+
+    Exemplo: [MSF]
+    Script executado com sucesso!
+    """
+
+  '[MSI]':
+    'prefix': 'msi'
+    'body': '[MSI]\n${1:Mensagem}\n$0'
+    'description': 'Mensagem condicional apresentada antes da execução de [SQL].'
+
+  '[OPC]':
+    'prefix': 'opc'
+    'body': '[OPC]\n${1:Identificador}: ${2:Imagem} : ${3:Label} : ${4:Sair} : ${5:Validação}\n$0'
+    'description': """
+    Permite acrescentar botões na janela da tabela de dados apresentados.
+    Deve ser utilizado em conjunto com as tags [PLE] e [SQL]. A tag [PLF] será executada somente após o clique em um dos botões do grid.
+    Se o identificador for CTRL_V, a opção de colar será habilitada no grid (embora nenhum botão adicional seja apresentado).
+    É possível definir a localização dos botões com as Palavras Reservadas [$BARRA$] e [$POPUP$].
+    A Palavra Reservada [$BARRA$] quando usada sozinha faz com que o botão apareça somente na barra de busca da janela, e a [$POPUP$] por sua vez, no botão direito do mouse. Caso nenhuma das Palavras Reservadas seja utilizada, o botão aparecerá tanto na barra quanto no botão direito do mouse.
+    Após a definição da localização dos botões, na validação, é possível utilizar os parâmetros internos [$LIN$], [$COL$], [$COLNAME$], [$CELL$] e [PLE].
+    OBS: Somente o [PLE] guarda a informação de mais de uma linha/célula, os demais parâmetros internos somente guardam a informação da última célula selecionada.
+
+    Sintaxe:
+    Identificador : Imagem : Label : Sair (fechar form) : Localização & Validação
+
+    Exemplo:
+      [OPC]
+      OPC01: %L/1 : Executar ação 1      : Sair
+      OPC02: %L/2 : Numero da Coluna     : N : [$POPUP$]  [$COL$] = 2
+      OPC03: %L/3 : Numero da Linha      : N : [$POPUP$]  [$LIN$] = 3
+      OPC04: %L/4 : Nome da Coluna       : N : [$POPUP$] '[$COLNAME$]'='YYY'
+      OPC05: %L/5 : Conteúdo da Célula   : N : [$POPUP$] '[$CELL$]'='xx'
+      OPC06: %L/6 : ID do(s) Registro(s) : N : [$POPUP$] [PLE] in (1,5)
+    """
+
+  '[OPP]':
+    'prefix': 'opp'
+    'body': '[OPP]\n${1:Identificador}: ${2:Imagem} : ${3:label} : ${4:Sair}\n$0'
+    'description': """
+    Permite acrescentar botões de ação na tela de parâmetros (que normalmente possui apenas os botões Confirmar e Retornar).
+    Deve ser utilizada em conjunto com a tag [PAR].
+    Se identificador for HIDDEN, todos os botões serão suprimidos.
+
+    Sintaxe:
+    Identificador : Imagem : Label : Sair (fechar form)
+
+    Exemplo:
+      [OPP]
+      #> instr('[$$$]', '$$$') = 0 and '[$$$]' <> '0'  <#
+      OPC01: %S/Nao : Excluir registro : Sair
+    """
+
+  '[PDF]':
+    'prefix': 'pdf'
+    'body': '[PDF]\n${1:C:{X-X-X/31-73-125/Tahoma/1/10\\}}\n${2:R:{X-X-X/31-73-125/Tahoma/2/8\\}}\n${3:F:{X-X-X/31-73-125/Tahoma/2/8\\}}\n${4:S:210/297}\n${5:O:Retrato}\n${6:M:7/7/0/10}\n${7:Z:Zebrar}\n${8:H:Auto ajuste}\n$0'
+    'description': """
+    Permite estabelecer definições para a geração do arquivo PDF. Se não informado, definições padrões serão assumidas.
+    As seguintes definições  podem ser estabelecidas nesta tag:
+    • C: define fonte do cabeçalho
+    • R: define fonte do rodapé
+    • S: dimensão do papel
+    • O: orientação (retrato ou paisagem)
+    • M: margens (esquerda, direita, superior, inferior)
+    • Z: indica se deve ou não zebrar as linhas do relatório
+    • F: define fonte dos dados do relatório (se alguma célula possuir definição de fonte, será respeitada a definição)
+    • H: indica se altura da linha deve ser automática (auto-ajustada) ou se deve obedecer a altura definida na tabela de dados
+
+    Exemplo:
+      [PDF]
+      C:{X-X-X/31-73-125/Tahoma/1/10}
+      R:{X-X-X/31-73-125/Tahoma/2/8}
+      F:{X-X-X/31-73-125/Tahoma/0/8}
+      S:210/297
+      O:Retrato
+      M:7/7/0/10
+      Z:Não zebrar
+      H:Auto ajuste
+    """
+
+  '[PLE]':
+    'prefix': 'ple'
+    'body': '[PLE]\n${1:*}ID#0\n$0'
+    'description': """
+    Utilizado em conjunto com [PLF].
+    Seu conteúdo deverá ser o label da coluna de [SQL] definida na tag [PLE]. Seu conteúdo poderá ser utilizado em qualquer uma das seguintes tags:
+    [OPC],[MFI],[PLF] e [MFF].
+    Caso inicie com o caracter *, indica que múltiplos registros poderão ser selecionados (caso contrário, apenas um registro poderá ser selecionado).
+    O conteúdo de [PLE] pode retornar:
+    1. Conteúdo separado por vírgula em caso de múltiplos registros selecionados (Analisar o item 3);
+    2.''{Empty}'' ou [PLE] em caso de nenhum registro selecionado;
+    3.  select MSG from OTM_MENSAGEM where TIPO='ID' and SESSAO=Sessão Atual caso seja necessário retornar um número de registros ou caracteres que excedam o limite estabelecido pelo banco de dados;
+    Embora não seja obrigatório, é boa prática definir a tag [OPC] ao utilizar a tag [PLE].
+    Observação: Na validação do [PLE] é necessário o uso de aspas simples ('[PLE]').
+    -----
+    Exemplo do uso de aspas simples:
+    ('[PLE]', 'PLE'~)> 0
+
+    Exemplo:
+      [PLE]
+      *ID#0
+    """
+
+  '[PLF]':
+    'prefix': 'plf'
+    'body': '[PLF]\nbegin\n\t$1\nend;\n$0'
+    'description': """
+    Bloco a ser executado após a tag [SQL].
+    Caso não exista a tag [PLE] executa este bloco imediatamente após a execução de [SQL].
+    Caso exista, só executa este bloco após o clique no botão de confirmação (ou em um dos botões definidos em [OPC]).
+    Este bloco pode possuir diversas cláusulas @> que podem ser executadas e validadas por #> <#.
+    Quando não definida, a cláusula @>SQL é assumida como default.
+
+    Exemplo:
+      [PLF]
+      begin
+         delete otm_trace where ID in ([PLE]);
+         commit;
+      end;
+    """
+
+  '[PLI]':
+    'prefix': 'pli'
+    'body': '[PLI]\nbegin\n\t$1\nend;\n$0'
+    'description': """
+    Bloco a ser executado antes da tag [SQL](e após a tag [PAR], caso a mesma exista).
+    Este bloco pode possuir diversas cláusulas @> que podem ser executadas e validadas por #> <#.
+    Quando não definida, a cláusula @>SQL é assumida como default.
+
+    Exemplo:
+      [PLI]
+      begin
+         popula_tabela_dados([SESSAO]);
+      end;
+    """
+
+  '[PRE]':
+    'prefix': 'pre'
+    'body': '[PRE]\nbegin\n\t\$1\nend;\n$0'
+    'description': """
+    Bloco a ser executado antes da tag [TIT].
+    Este bloco pode possuir diversas cláusulas @> que podem ser executadas e validadas por #> <#.
+    Quando não definida, a cláusula @>SQL é assumida como default.
+
+    Exemplo:
+      [PRE]
+      begin
+         popula_tabela_inicial([SESSAO]);
+      end;
+    """
+
+  '[SQE]':
+    'prefix': 'sqe'
+    'body': '[SQE]\n${1:script}\n$0'
+    'description': """
+    Instrução SQL que será executada para geração do relatório na criação do PDF, planilha ou browser.
+    Caso não definida, [SQE] assume o conteúdo de [SQL].
+    Caso seja definida e a tag [SQL] não seja, um PDF é gerado e exibido automaticamente.
+
+    Uso de <b>UNION_TABLE</b>:
+    Permite que mais de um GRID de dados, não necessariamente com o mesmo número ou tipo de colunas, seja exibido no relatório. Deve ser utilizado entre os blocos de select.
+    OBS: Caso seja utilizado o UNION_TABLE, no browser e planilha serão considerados o select da tag [SQL].
+
+    Uso de <b>#SELECT</b>:
+    Também é utilizado para permitir que mais de um GRID de dados seja exibido no relatório, porém através do #SELECT temos mais dinamicidade, podendo retornar um número indefinido de GRIDs.
+    O #select é suportado pelos 3 tipos de relatório, browser, planilha e PDF.
+
+    Exemplo:
+      [SQE]
+      select ID "Código#5", Texto "Descrição#30"
+      from tmp_teste_edt
+      order by 2
+    """
+
+  '[SQL]':
+    'prefix': 'sql'
+    'body': '[SQL]\n${1:script}\n$0'
+    'description': """
+    [SQL]
+    Instrução SQL que será executada para geração da consulta e preenchimento do grid.
+    Além de utilizar os resultantes dos parâmetros [PAR] na cláusula WHERE,  podem ser exploradas algumas funcionalidades como edição/formatação/totalizadores (com base no label do campo) e cores/imagens (com base no conteúdo do campo).
+
+    Alguns labels e caracteres especiais na definição dos campos podem ser utilizados como forma de explorar mais profundamente esta tag:
+    <b>DRILL#0, REFRESH#0, $ID#0, $, #, @, [01], UNION_TABLE_n</b>
+    -----
+    [SQL]
+    select id "$ID#0", '#MKQ:Modelos/ModeloA' DRILL#0,
+           ID "Código#5", Texto "Descrição#30$1", 'xx' Z#5, null XXX#0,Data "Data#D10$2",
+           '#IMG;%D/Sinal'||decode(Ativo,1,'VDE','VRM') "Ativo#C8$3", Numero "Valor#N8$4@S", 'yy' Y#5,
+           decode(Situacao,1,'Aberto',2,'Fechado',0,'Cancelado') "Situação#10$5",
+           (select texto from tmp_teste_edt where ID=X.TMP_TESTE_EDT_ID) "Superior#30$6", id id#0
+    from tmp_teste_edt X
+    order by id
+
+    Uso de UNION_TABLE_n:
+    Este comando permite dividir o bloco SQL em dois grids distintos (inclusive, com número de colunas distintas).
+    O segundo bloco (definido após o comando UNION_TABLE_n) será apresentado em um grid acima do grid de dados.
+    O valor n define o número de linhas fixas no grid.
+
+    Uso de IMAGENS:
+    Uma imagem pode ser apresentada em cada célula resultante do script.
+    Para isto, devemos usar a seguinte sintaxe: #IMG;Nome_da_imagem;W;H
+    W e H são opcionais. Quando não informados será assumida a dimensão padrão de 19x19.
+    Ao informar W e H poderá ser necessário aumentar a altura das linhas da tabela (vide tag [DIM]).
+
+    OBS: No caso de alteração de cores no SVG, é estritamente necessário utilizar "d" em seções que assumirão a cor default (vide docimg).
+
+    Exemplo: <i>
+    select rownum "Cod#10", 1 "Teste#N10@S", 'Teste '||rownum "Descrição#80"
+    from dual
+    connect by level < 100
+    UNION_TABLE_4
+    select rownum "Cod#10", 1 "Teste#N10@S", 'Teste '||rownum "Descrição#80", to_char(sysdate, 'HH24:mi:ss') "Teste#20", rownum*3/2 "XXX#N"
+    from dual
+    connect by level < 8
+    """
+
+  '[TIT]':
+    'prefix': 'tit'
+    'body': '[TIT]\n${1:Título da janela#}\n$0'
+    'description': """
+    Define o título a ser apresentado na tela que receberá parâmetros.
+    Normalmente esta tag não recebe validações, uma vez que quando a mesma é apresentada os parâmetros ainda não foram respondidos.
+    Se o texto finalizar com o caracter "#", ao fechar a janela no botão vermelho no topo esquerdo da tela, uma mensagem de confirmação será solicitada.
+
+    Exemplo
+      [TIT]
+      Relação de Itens#
+    """
+
+  '[VDD]':
+    'prefix': 'vdd'
+    'body': '[VDD]\n+> ${1:ID}: ${2:where}: ${3:Tipo}: ${4:Mensagem}\n$0'
+    'description': """
+    Esta tag permite definir regras de validação para edição de campos
+    (na tela de parâmetros definida por [PAR] ou no grid, quando utilizada a tag [EDT]).
+
+    Variável [$EDT$] refere-se ao parâmetro (quando em [PAR]) em edição.
+    Variável [$n$] refere-se à coluna n ([EDT]) em edição.
+
+    Sintaxe:
+      +> ID : WHERE : TIPO : MENSAGEM
+
+    Exemplo:
+      [VDD]
+      +>  1 : 'X[$EDT$]' = 'X'        :E : #select 'Desenho deve ser preenchido' from dual
+      +>  1 : 11>length('X[$EDT$]')   :W : Recomensa-se informar, pelo menos, 10 caracteres
+    """
+
+  'Linha [VDD]':
+    'prefix': 'vdd+'
+    'body': '+> ${1:ID}: ${2:where}: ${3:Tipo}: ${4:Mensagem}\n$0'
+    'description': """
+    Esta tag permite definir regras de validação para edição de campos
+    (na tela de parâmetros definida por [PAR] ou no grid, quando utilizada a tag [EDT]).
+
+    Variável [$EDT$] refere-se ao parâmetro (quando em [PAR]) em edição.
+    Variável [$n$] refere-se à coluna n ([EDT]) em edição.
+
+    Sintaxe:
+      +> ID : WHERE : TIPO : MENSAGEM
+
+    Exemplo:
+      [VDD]
+      +>  1 : 'X[$EDT$]' = 'X'        :E : #select 'Desenho deve ser preenchido' from dual
+      +>  1 : 11>length('X[$EDT$]')   :W : Recomensa-se informar, pelo menos, 10 caracteres
+    """
+
+  '[PAR]':
+    'prefix': 'par'
+    'body': '[PAR]\n$0'
+    'description': """
+    Os parâmetros a seguir permitem a criação de uma interface de entrada de dados para o usuário.
+    Embora sejam utilizados, principalmente, na tag [PAR], podem ser utilizados (com sintaxe similar) na tag [EDT].
+
+    Tipologias possíveis:
+    FL, CK, FK, DT, TX, NM, DC, OG, PW
+
+    Sintaxe global:
+      [VARIAVEL] : Label : Tipologia : Sintaxe específica : Default : ID Validação : Parâmetro para Posicionamento
+    """
+
+  'CK [PAR]':
+    'prefix': 'parck'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: CK$3: ${4:IDTRUE};${5:IDFALSE};${6:Texto TRUE};${7:Texto FALSE} : ${4:Default} : ${8:ID do VDD} : ${9:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo check-box.
+
+    Recebe como notação:
+      • Valor para true (check marcado) e para false separados por ponto e vírgula;
+      Acessível através de [PARAMETRO] (ID)
+      • Dois valores textuais equivalentes a true/false (para serem utilizados quando necessários)
+      • O valor default (que deve ser idêntico a um dos dois valores definidos para true e false).
+      Acessível através de {[PARAMETRO]} (Texto)
+
+    O valor default deve ser igual ao ID desejado.
+
+    Exemplo:
+      [CHECK]: Listar tabelas sem registros?: CK300: S;N;Sim;Não : S
+    """
+
+  'DC [PAR]':
+    'prefix': 'pardc'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: DC$3: ${4:ID1};${5:Texto 1};${6:ID2};${7:Texto 2};${8:ID3};${9:Texto 3} : ${5:Default} : ${10:ID do VDD} : ${11:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo lista de opções.
+
+    Recebe em sua notação uma sequência de informações separadas por ponto e vírgula (ou ^).
+    Sua notação será utilizada de forma similar a um decode (daí a sigla DC).
+    Para cada par de dados, o primeiro será utilizado nos scripts enquanto que o segundo será apresentado na tela e no cabeçalho (quando utilizado).
+    A primeira opção é assumida como default (se nenhuma for passada).
+
+    Exemplo:
+      [LOCK]:  #Table Lock:     DC: E^Habilitado^D^Desabilitado^A^Ambos : Ambos
+    """
+
+  'DT [PAR]':
+    'prefix': 'pardt'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: DT$3: ${4:N;} ${5:Data Inicial}; ${6:Data Final} ${7:;WHERE} : ${8:Default} : ${9:ID do VDD} : ${10:[PAR Posicionamento]}\n$0'
+    'description': """
+    O parâmetro de data pode (opcionalmente) receber em sua notação:
+
+    • N (opcional): Indica que o calendário não será exibido ao clicar no botão do mesmo
+      (não é necessário ter ";" após o mesmo);
+    • RangeInicial e RangeFinal (separados por ";"): somente podem ser utilizados juntos.
+      Indicam um intervalo de datas permitidas pelo parâmetro;
+    • Where (opcional): somente serão datas válidas as que retornarem verdadeiro na condição definida.
+      Usa-se “[$EDT$]” como sendo a data a ser testada;
+
+    • Uso de Data:
+       0 Caracteres ou H:
+         Assume a data atual
+       2 Caracteres:
+         DD; (assume mês e ano atuais)
+       4 ou 5 Caracteres (sem ou com separador):
+         DDMM ou DD/MM; (assume ano atual)
+       6 ou 8 Caracteres (sem ou com separador):
+         DDMMAA ou DD/MM/AA
+       8 ou 10 Caracteres (sem ou com separador):
+         DDMMAAAA ou DD/MM/AAAA
+    • Uso de operadores:
+       Agem em uma expressão sempre sobre uma data, sendo possível adicionar (+) ou subtrair (-) Dias, Semanas, Meses, Anos informando a inicial do correspondente logo após a quantidade; EX: -2A (menos 2 anos)
+    • Uso de modificadores:
+       Agem em uma expressão sempre sobre uma data, sendo possível modificar a data para o Primeiro ou Último dia do(a) Semana, Mês ou Ano. Modificadores possíveis (PS, PM, PA, US, UM, UA). EX: HUM (último dia do mês referente a data de hoje (“H”))
+    • Uso de expressões:
+       As expressões são sempre resolvidas da esquerda para direita, pegando sempre duplas (uma data e um operador ou modificador) e resultando sempre em uma data;'
+
+    Exemplo:
+      [DATA]:  Data : DT250 :  NH-5; H+5;     to_char(to_date(\'[$EDT$]\'), \'d\') in (2,3,4,5,6) : +1
+  """
+
+  'FK [PAR]':
+    'prefix': 'parfk'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: FK$3: \t${4:Tabela}\n\t\t\t\t\t\t\t; ${5:Colunas Lov}\n\t\t\t\t\t\t\t; ${6:PK}||chr(9)||${7:Descrição}${8:;WHERE}\n\t\t\t\t\t\t\t: ${9:Default} : ${10:ID do VDD} : ${11:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo lista de valores de uma tabela (grid).
+
+    A sequência de parâmetros, contudo, não é tão complexa como parece à primeira vista. Veja:
+    TABELA; COLUNAS_LOV; PK||chr(9)||DESCR; WHERE+ORDER : DEFAULT : VDD : POSICIONAMENTO
+
+    Exemplo:
+      [SPACE]: @TableSpace:  FK: *ALL_TABLES; distinct tablespace_name
+                   ; tablespace_name||chr(9)||tablespace_name
+                   ; tablespace_name is not null order by tablespace_name : OTIMIZA
+    """
+
+  'FL [PAR]':
+    'prefix': 'parfl'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: FL$3: ${4:Extensão do Arquivo}; ${5:Descrição}; ${6:Pasta inicial} : ${7:Arquivo default} : ${8:ID do VDD} : ${9:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo file
+
+    Recebe como sua notação:
+      • Extensões de arquivos (separadas por vírgula se múltiplas)
+      • Respectivas descrições (também separadas por vírgula)
+      • Pasta inicial para busca, arquivo default (conteúdo padrão para o campo).
+
+    Caso a extensão definida para os "arquivos" seja DIR, este parâmetro receberá pastas ao invés de arquivos.
+
+    Exemplo:
+      [FILE]: Arquivo: FL: PDF, XLS; PDF Files,XLS Files; /Temp: Teste.PDF
+    """
+
+  'NM [PAR]':
+    'prefix': 'parnm'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: NM$3: ${4:Número de Casas Decimais}; ${5:Valor Mínimo};${6:Valor Máximo} : ${7:Default} : ${8:ID do VDD} : ${9:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo numérico.
+
+    Recebe em sua notação:
+      • Número de casas decimais;
+      • Limite inferior/mínimo (será mostrado em tooltiptext);
+      • Limite superior/máximo (será mostrado em tooltiptext).
+
+    Observar que entre o número de casas decimais, valor mínimo e valor máximo da faixa, o separador é ponto e vírgula!
+    Opcionalmente pode receber, como parâmetro adicional, o valor default (vide exemplo onde o valor default será 500).
+    Os valores mínimo e máximo são apenas informativo (a validação efetiva deve ser implementada com a tag [VDD])
+    OBS: Caso não seja implementado um VDD para o parâmetro, a Suíte se encarregará de implementar automaticamente um VDD para validação do valor mínimo e máximo.
+
+    Se o indicador casa decimais contiver o caracter B, uma barra de controle deslizante será apresentada.
+    Se o indicador B estiver acompanhado de R, o refresh será dinâmico.
+
+    Exemplo:
+      [LINHAS]: Listar apenas "n" linhas:   NM-: 0; 1;9999 : 500
+    """
+
+  'PW [PAR]':
+    'prefix': 'parpw'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: PW$3: ${4:Comprimento Máximo} : ${5:Default} : ${6:ID do VDD} : ${7:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo password.
+
+    É similar ao parâmetro TX, mas não apresenta o texto digitado na tela.
+    Recebe uma informação em sua notação:
+      • Comprimento máximo do texto;
+
+    Exemplo:
+      [PASSWD] :  Senha Atual : PW : 30
+    """
+
+  'TX [PAR]':
+    'prefix': 'partx'
+    'body': '[${1:PARAMETRO}]: ${2:Label}: TX$3: ${4:Comprimento Máximo} ${5:;U-Uppercase L-Lowercase} ${6:;Expressão Regular} : ${7:Default} : ${8:ID do VDD} : ${9:[PAR Posicionamento]}\n$0'
+    'description': """
+    Parâmetro tipo texto.
+
+    Pode receber, em sua notação, três informações:
+      • número de caracteres permitidos (comprimento do texto);
+      • U para indicar uppercase ou L para indicar lowercase;
+      • Expressão regular para validar o caracter digitado.
+
+    Uso de Múltiplas Linhas:
+    Para ser utilizado, deve-se utilizar a seguinte sintaxe:
+
+    [PARAMETRO]: Label<b>BEL</b> Altura :  TX435: 50;U;[A-Z]|[0-9]
+
+    Após a altura pode-se utilizar um N opcional para indicar que o TX não utilizará efetivamente a altura definida.
+
+    Uso de Imagens no TX com Múltiplas Linhas:
+    O parâmetro tipo texto pode receber imagens seguindo a seguinte sintaxe:
+
+    [PARAMETRO]:  Label {BEL} Altura : TX250 : 250: #IMG^Imagem^C-Com Borda ou S-Sem Borda^Cor_Fundo
+
+    Uso de Gráficos no TX com Múltiplas Linhas:
+    O parâmetro tipo texto pode receber gráficos seguindo a seguinte sintaxe:
+
+    [PARAMETRO]:  Label {BEL} Altura : TX250 : 250: #IMG^GRF_TipoDoGráfico%Título%Notação específica do tipo
+
+    Uso de Vídeos no TX com Múltiplas Linhas:
+    O parâmetro tipo texto pode receber vídeos seguindo a seguinte sintaxe:
+
+    [PARAMETRO]:  Label {BEL}  Altura : TX250 : 250: <b>#IMG^Vídeo#</b>
+
+    Exemplo:
+      [TEXTO]: #Proprietário que contenha:  TX-435: 50;U;[A-Z]|[0-9] : OT
+    """
+
+  '@>ARQ':
+    'prefix': 'cmdarq'
+    'body': '@>ARQ\n${1:Arquivo}; ${2:[SESSAO]}; ${3:I/O}; ${4:Mensagem}; ${5:Tipo} ${6:;Grava se tem erro (SIM ou NAO)}\n$0'
+    'description': """
+    Permite ler/gravar um arquivo (texto, xml, csv, etc), de acordo com a sintaxe
+
+    Detalhamento da sintaxe:
+
+    Arquivo; Sessão; I/O; Mensagem; Tipo; Grava_Erro
+
+    • I/O
+        I (input) lê o arquivo; O (output) grava o arquivo
+    • Mensagem
+        SEM não mostra as possíveis mensagens de erro na tela, gravando-as em OTM_MENSAGEM
+    • Tipo
+        Se passado (opcional) exporta apenas dados da sessão/tipo definido
+    • Grava_Erro
+        SIM grava os registros (na importação) mesmo que ocorra algum erro (com commit por registro)
+        NÃO (default) grava apenas se a importação ocorrer até o final, sem erros (sem commit por registro)
+
+    Ao importar (I) os dados serão armazenados em OTM_DADOS_EXTERNOS populando a coluna CONTEUDO.
+    Ao exportar (O) os dados são lidos da tabela OTM_DADOS_EXTERNOS da coluna RETORNO.
+
+    Exemplo:
+      @>ARQ
+      %TMP%Producao.MKP; [SESSAO]; O; Sem Mensagem; MKQ
+    """
+
+  '@>CAB':
+    'prefix': 'cmdcab'
+    'body': '@>CAB\n${1:Cabeçalho}\n$0'
+    'description': """
+    Altera o texto do cabeçalho da tela do MENU.
+
+    @>CAB
+    #select nome from empresa where ID=[EMPRESA]
+    """
+
+  '@>DFM':
+    'prefix': 'cmddfm'
+    'body': '@>DFM\n${1:Origem} : ${2:Destino} : ${3:Ação (Copiar, Mover, Deletar ou Listar)} : ${4:Interação/Hidden (Sim ou Não)} : ${5:Subpastas (Sim ou Não)} : ${6:Erros na Tela (Sim ou Não)}\n$0'
+    'description': """
+    Permite copiar, mover ou apagar arquivos de/para pastas do SO ou listar o conteúdo de uma pasta.
+
+    Sua notação recebe:
+      • origem: caminho e nome do arquivo de origem (a sofrer a ação);
+      • destino: caminho e nome do arquivo/pasta destino (para ação Copiar e Mover);
+      • ação: indica a ação a ser realizada em origem (Copiar, Mover, Deletar ou Listar);
+      • interacao/hidden: indica se haverá mensagem de interação com usuário caso arquivo destino já exista
+        (para ação listar, indica se lista/exibe arquivos/pastas ocultas/sistema);
+      • subpastas: indica se deve criar pastas destinos caso não existam
+        (para ação Listar indica se deve listar conteúdo das subpastas);
+      • erros_na_tela: indica se mensagens de erro devem ser apresentadas na tela (quando SIM, processo é interrompido).
+        Opção listar não considera esta notação.
+
+    Mensagens de sucesso ou erro são armazenadas em OTM_MENSAGEM com tipo = 'DFM'.
+    Na opção listar, a relação de arquivos/pastas será armazenada em OTM_MENSAGEM.
+
+    Exemplo:
+      [PLI]
+      @>SQL
+      begin
+        delete OTM_MENSAGEM where sessao=SYS_CONTEXT('USERENV','SESSIONID') and tipo='DFM';
+      end;
+      @>DFM
+      C@/temp/teste1.txt : C@/temp/xxx/teste2.txt : C : S : S : N
+      @>DFM
+      C@/temp : : L : N : S
+    """
+
+  '@>EML':
+    'prefix': 'cmdeml'
+    'body': '@>EML\n${1:ID}\n$0'
+    'description': """
+    Dispara e-mails (todos se ID=0 ou específico, conforme ID passado).
+
+    Exemplo:
+      @>EML
+      12
+    """
+
+  '@>EXE':
+    'prefix': 'cmdexe'
+    'body': '@>EXE\n${1:Aplicação A Executar}\n$0'
+    'description': """
+    Permite a execução de um programa fora do ambiente da Suíte OTM.
+    Dois pontos é utilizado como : e não AQUI_TEM_DOIS_PONTOS.
+    Depois da aplicação é possível colocar {%}, o que faz com que o MKQ espere a execução da aplicação externa.
+    Caso a aplicação utilize de parâmetros, o @ é o separador utilizado.
+    Mesmo que o caminho da aplicação tenha espaços, não deve ir entre aspas.
+
+    Exemplo:
+      @>EXE
+      [APL_A_EXECUTAR]
+    """
+
+  '@>MKP':
+    'prefix': 'cmdmkp'
+    'body': '@>MKP\n${1:MakePanel A Executar}\n$0'
+    'description': """
+    Permite executar uma aplicação MakePanel, dentro da dimensão definida para o MKQ.
+
+    Exemplo:
+      @>MKP
+      #PRODUCAO
+    """
+
+  '@>MKPT':
+    'prefix': 'cmdmkpt'
+    'body': '@>MKPT\n${1:MakePanel A Executar}\n$0'
+    'description': """
+    Permite executar uma aplicação MakePanel, sem vínculo com a dimensão do MKQ.
+
+    Exemplo:
+      @>MKPT
+      #PRODUCAO
+    """
+
+  '@>MKQ':
+    'prefix': 'cmdmkq'
+    'body': '@>MKQ\n${1:MakeQuery A Executar}\n$0'
+    'description': """
+    Permite a execução de outro MKQ.
+
+    Exemplo
+      @>MKQ
+      otm_prod/omrp/cad_oc_manEOT[$$$]EOT[PLE]EOT[$PLANO$]EOT[PLANO]
+    """
+
+  '@>SQL':
+    'prefix': 'cmdsql'
+    'body': '@>SQL\nbegin\n\t$1\nend;\n$0'
+    'description': """
+    Permite executar um bloco PL/SQL padrão .
+
+    Exemplo
+      @>SQL
+      begin
+         otm_trace_pr([SESSAO]);
+      end;
+    """
+
+  '@>WSV':
+    'prefix': 'cmdwsv'
+    'body': '@>WSV\n${1:Webservice A Executar}\n$0'
+    'description': """
+    Permite a execução de um serviço.
+
+    Exemplo:
+      @>WSV
+      -- Executa o serviço e em caso de algum erro encerra o MKQ
+      http://192.168.50.5:8552/u_braw0004.apl?TOKEN=ekW301jBbev24&SESSAO=[SESSAO]&EMPRESA=[CODEMP]
+
+      @>WSV
+      -- Executa o serviço e em caso de algum erro continua a execução do MKQ
+      #http://192.168.50.5:8552/u_braw0004.apl?TOKEN=ekW301jBbev24&SESSAO=[SESSAO]&EMPRESA=[CODEMP]
+    """
+
+  '@>WWW':
+    'prefix': 'cmdwww'
+    'body': '@>WWW\n${1:URL}\n$0'
+    'description': """
+    Permite a abertura de arquivo (URL).
+
+    Exemplo
+      @>WWW
+      www.otm.com.br
+    """
+
+  '@>XLS':
+    'prefix': 'cmdxls'
+    'body': '@>XLS\n${1:[ARQUIVO]}; ${2:[ABA]}; ${3:[SESSAO]}; ${4:[COLUNA]}\n$0'
+    'description':
+      """
+      Permite importar arquivo XLS para a tabela OTM_DADOS_EXTERNOS.
+
+      Exemplo
+        @>XLS
+        [ARQUIVO]; [ABA]; [SESSAO]; [COLUNA]
+      """
+  '@>GRF':
+    'prefix': 'cmdgrf'
+    'body': '@>GRF\n<ARQ>${1:CAMINHO}\n<DAD>${2:LEGENDA1} = ${3:VALOR1}, ${4:LEGENDA2} = ${5:VALOR2}\n<GRF>${6:TIPO DE GRAFICO}\n<TIT>${7:TITULO}\n<COR>${8:245-239-246}\n<DIM>${9:LARGURA}, ${10:ALTURA}\n$0'
+    'description':"""
+      Utilizado para gerar uma imagem de gráfico no formato .png.
+      Deve conter as seguintes informações:
+
+      <ARQ>Caminho do arquivo a ser gerado;
+      <DAD>Os dados do gráfico
+      <GRF>Tipo do Gráfico (PIE, PIE3D, BARH, BAR, BAR3D, LINE, LINE3D,TERM ou DASH)
+      <TIT>Título do Gráfico
+      <COR>Cor de fundo do gráfico (R-G-B)
+      <DIM>Dimensões da Imagem (largura , altura)
+
+      Exemplo
+         @>GRF
+         <ARQ> %TEMP%/Grafico
+         <DAD>LEGENDA1 = 100, LEGENDA2 = 200
+         <GRF>PIE
+         <TIT>TITULO
+         <COR>245-239-246
+         <DIM> 500, 500
+    """
+
+  'Condicional':
+    'prefix': 'cond'
+    'body': '#>${1:Condição}<#\n$0'
+    'description': 'Adiciona uma condicional.'
+
+  'Condicional Global':
+    'prefix': 'condg'
+    'body': '##>${1:Condição}<##\n$0'
+    'description': 'Adiciona uma condicional global.'
+
+  'Condicional para $ID$':
+    'prefix': 'condid'
+    'body': '${1:#> instr(\'[$ID$]\', \'$ID$\') > 0 <#\n}${2:#> instr(\'[$ID$]\', \'$ID$\') = 0 <#}\n$0'
+    'description': 'Adiciona uma condicional verificando se existe o parâmetro [$ID$].'
+
+  'Condicional para $$$':
+    'prefix': 'cond$'
+    'body': '${1:#> instr(\'[$$$]\', \'$$$\') > 0 <#\n}${2:#> instr(\'[$$$]\', \'$$$\') = 0 <#}\n$0'
+    'description': 'Adiciona uma condicional verificando se existe o parâmetro [$$$].'
+
+  'Condicional Global para $ID$':
+    'prefix': 'condgid'
+    'body': '${1:##> instr(\'[$ID$]\', \'$ID$\') > 0 <##\n}${2:##> instr(\'[$ID$]\', \'$ID$\') = 0 <##}\n$0'
+    'description': 'Adiciona uma condicional global verificando se existe o parâmetro [$ID$].'
+
+  'Condicional Global para $$$':
+    'prefix': 'condg$'
+    'body': '${1:##> instr(\'[$$$]\', \'$$$\') > 0 <##\n}${2:##> instr(\'[$$$]\', \'$$$\') = 0 <##}\n$0'
+    'description': 'Adiciona uma condicional global verificando se existe o parâmetro [$$$].'
+
+  'Bloco de código <<>>':
+    'prefix': '<<'
+    'body': '<< ${1:Descrição do Bloco}\n\t$2\n>>\n$0'
+
+  'Formatação Célula':
+    'prefix': 'format'
+    'body': '{${1:X-X-X}/${2:X-X-X}/${3:Tahoma}-${4:0}-${5:12}${6:/H25}\\}$0'
+    'description': 'Formatação para células do GRID\n{Cor Background/Cor Foreground/Fonte-Estilo-Tamanho/Altura Linha}'
+
+  'Formatação Linha':
+    'prefix': 'formatl'
+    'body': '{{${1:X-X-X}/${2:X-X-X}/${3:Tahoma}-${4:0}-${5:12}${6:/H25}\\}\\}$0'
+    'description': 'Formatação para linhas do GRID\n{Cor Background/Cor Foreground/Fonte-Estilo-Tamanho/Altura Linha}'
+
+  'Operadores':
+    'prefix': 'docoper'
+    'body': ''
+    'description': """
+    A OTMSuíte possui alguns operadores e caracteres especiais utilizados em vários contextos.
+
+    • Limites de condicional:
+        #> <#, ##> <##
+    • Permite selecionar mais de um registro quando no PLE ou FK, por exemplo:
+        *
+    • Modificadores dos campos de parâmetro:
+        #, -, @, $
+    • Tipos de dados do GRID:
+        #D, #N, #I, #C
+    • Totalizadores no GRID:
+        @S, @C, @A, @M, @N
+    • Modificadores para CAB:
+        @@@, @@
+    • Define que a célula não terá seu conteúdo editável e pode definir tooltip text:
+        !!!
+    • Chamadas de MKQ
+        !, +, -, #
+    • Separador utilizado em FK e REFRESH
+        chr(9)
+    • SVG
+        |, @
+    • Estrutura de tópicos
+        +-
+    """
+   'Imagens':
+    'prefix': 'docimg'
+    'body': ''
+    'description': """
+     As imagens são utilizadas em diversos lugares na OTMSuíte, porém seguem com a mesma sintaxe.
+    Elas se encontram na pasta Images, separadas entre Otimiza e Cliente.
+    As extensões suportadas são: .png, .gif e .svg.
+
+    #%D/OTM Teste ; %D/CX_Vazia; Visualizar menu ; Não Controlar Acesso
+
+    [OPC]
+    OPC_E: %P/Recyclebin : Excluir registro : N
+
+    Para facilitar seu uso, pode-se utilizar de abreviações para acessar as pastas:
+    PNGs/GIFs
+    %C = /Images/Cliente
+    %D = /Images/Otimiza/Diversos
+    %L = /Images/Otimiza/Letras
+    %P = /Imagem/Otimiza/Padrao
+    %S = /Imagem/Otimiza/System
+
+    SVGs
+    Encontram-se nas pastas:
+    %SVGC = /Images/Cliente/SVG
+    %SVGL = /Images/Otimiza/SVG/Letras
+    %SVGD = /Images/Otimiza/SVG/Diversos
+    %SVGP = /Images/Otimiza/SVG/Padrao
+    %SVGS = /Images/Otimiza/SVG/System
+    %SVGI = /Images/Otimiza/SVG/ionicons
+    %SVGF = /Images/Otimiza/SVG/fontawesome
+
+    Imagens SVG podem receber cores no formato RGBA como parâmetro:
+    %SVGI/logo-buffer|@61-84-34-255|d|139-175-169-255
+
+    As cores devem ser separadas por | logo após o caminho da imagem.
+    Cada cor altera um segmento da imagem.
+    Para não definir uma cor para algum segmento específico, utiliza-se o "d" (default).
+    A cor com @ define o default para os segmentos sem cor definida.
+    """
+
+  'Reservadas':
+      'prefix': 'docreserv'
+      'body': '$0'
+      'description': """
+      A OTMSuíte possui algumas palavras (variáveis) reservadas utilizados em vários contextos.
+
+      CTRL_V      HIDDEN
+      #INCLUDE    #SELECT
+      ##POS##
+      [$COL$]     [$COLNAME$]
+      [$CELL$]    [$LIN$]
+      [$POPUP$]   [$BARRA$]
+      [$EDT$]     [$FK$]   [$n$]
+      [$WIDTH$]   [$HEIGHT$]
+      BEL         EOT
+      AQUI_TEM_DOIS_PONTOS
+      AQUI_TEM_PONTO_VIRG
+      """
+
+    # Snippets Oracle
+  'instr() (Oracle)':
+    'prefix': 'instr'
+    'body': 'instr(${1:\'String1\'}, ${2:\'String2\'})$0'
+    'description': 'Testa se uma string contém uma segunda String (retorno = 0 não contém, retorno > 0 representa o índice).\nEX: instr(\'[$ID$]\', \'$ID$\') > 0'
+
+  'replace() (Oracle)':
+    'prefix': 'replace'
+    'body': 'replace(${1:\'String1\'}, ${2:\'String2\'}, ${3:\'String3\'})$0'
+    'description': 'Substitui todas as ocorrências da segunda String pela terceira na String1.\nEX: replace(\'item1 ; item2\', \';\', \'-\')'
+
+  'length() (Oracle)':
+    'prefix': 'length'
+    'body': 'length(${1:\'String\'})$0'
+    'description': 'Retorna o número de caracteres de uma String.\nEX: length(\'texto\')'
+
+  'decode() (Oracle)':
+    'prefix': 'decode'
+    'body': 'decode($1, $2, $3, $4)$0'
+    'description': 'Função de escolha do Oracle.\nEX:decode(a, \'F\', 0, 1)'
+
+  'Bloco PL/SQL simples':
+    'prefix': 'begin'
+    'body': 'begin\n\t$1\nend;\n$0'
+    'description': 'Inclui um ploco PL/SQL vazio.\nEX:\nbegin\n\totm_trace_pr(\'Teste\');\nend;'
+
+  'Bloco PL/SQL c/ declare':
+    'prefix': 'declare'
+    'body': 'declare\n\t$1\nbegin\n\t$2\nend;\n$0'
+    'description': 'Inclui um ploco PL/SQL vazio com declare.\nEX:\ndeclare\n\tv_texto varchar2(30);\nbegin\n\tv_texto := \'Teste\';\n\totm_trace_pr(v_texto);\nend;'
+
+  'for (Oracle)':
+    'prefix': 'for'
+    'body': 'for ${1:a} in $2 \nloop\n\t${3:Faz algo;}\nend loop;\n$0'
+    'description': 'Inclui for de PL/SQL.\nEX:\nfor a in 1 .. 10\nloop\n\totm_trace_pr(\'Teste\'||a);\nend loop;'
+
+  'if simples (Oracle)':
+    'prefix': 'if'
+    'body': 'if ${1:condição} then\n\t${2:Faz algo;}\nend;\n$0'
+    'description': 'Inclui uma condicional simples de PL/SQL.\nEX:\nif a = b then\n\totm_trace_pr(\'Verdadeiro\');\nend;'
+
+  'if com else (Oracle)':
+    'prefix': 'ife'
+    'body': 'if ${1:condição} then\n\t${2:Faz algo;}\nelse\n\t${3:Faz outro algo;}\nend;\n$0'
+    'description': 'Inclui uma condicional com else (PL/SQL).\nEX:\nif a = b then\n\totm_trace_pr(\'Verdadeiro\');\nelse\n\totm_trace_pr(\'Falso\');\nend;'
+
+  'Case simples (Oracle)':
+    'prefix': 'case'
+    'body': 'case\n\twhen ${1:condição} then ${2:\'algo\'}\nend\n$0'
+    'description': 'Inclui uma condicional simples.\nEX:\ncase\n\twhen a = b then \'Verdadeiro\'\nend'
+
+  'Case composto (Oracle)':
+    'prefix': 'casem'
+    'body': 'case\n\twhen ${1:condição} then ${2:\'Algo\'}\n\twhen ${3:condição2} then ${4:\'Outro algo\'}\n\telse ${6:\'Outro algo ainda\'}\nend\n$0'
+    'description': 'Inclui uma condicional (case) composta e com else.\nEX:\ncase\n\twhen a = b then \'Resultado B\'\n\twhen a = c then \'Resultado C\'\n\telse \'Resultado D\'\nend'
+
+  'otm_split()':
+    'prefix': 'otmsplit'
+    'body': 'otm_split(${1:\'String\'}, ${2:\'Separador\'}, ${3:\'Índice\'})$0'
+    'description': 'Função de split da Otimiza, separa a String através do separador e retorna a string correspondente ao índice informado.\nEX:otm_split(retorno, chr(9), 2)'
+
+  'trunc() (Oracle)':
+    'prefix': 'trunc'
+    'body': 'trunc(${1:\'String\'})$0'
+    'description': 'Função de trunc (Oracle), remove espaços à direita e esquerda da string.\nEX:trunc(\'    teste  \')'
+
+  'otm_mensagem_pr':
+    'prefix': 'otm_mens'
+    'body': 'otm_mensagem_pr([SESSAO], \'${1:TIPO}\', \'${2:MSG}\');\n$0'
+    'description': 'Procedure para inserção de mensagem na tabela otm_mensagem.'
+
+    # Snippets Geral
+  'Parâmetro de SESSAO':
+    'prefix': 'parsessao'
+    'body': '[SESSAO]\t: -Sessao\t\t\t: FK\t: (SELECT SYS_CONTEXT(\'USERENV\',\'SESSIONID\') a FROM DUAL) ;a ;a||chr(9)||a$0'
+    'description': """
+      Adiciona um parâmetro invisível que retorna a SESSAO atual conforme abaixo:
+      [SESSAO]  :   -Sessao           : FK  : (SELECT SYS_CONTEXT('USERENV','SESSIONID') a FROM DUAL) ;a ;a||chr(9)||a
+      """
+
+  'SESSAO':
+    'prefix': 'syscont'
+    'body': 'SYS_CONTEXT(\'USERENV\',\'SESSIONID\')$0'
+    'description': """
+      Adiciona uma chamada da função SYS_CONTEXT do Oracle para obtenção da sessão atual.
+      """
