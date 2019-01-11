@@ -26,6 +26,9 @@ patterns: [ # An array of individual pattern declarations.
     include: '#etx'
   }
   {
+    include: '#stx'
+  }
+  {
     include: '#bel'
   }
   {
@@ -78,7 +81,7 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
       match: '\\b(MKQ|PAP|ETQ|QTD|MRG|LEI|PDF|CAR|EDT|VDD|TIT|CAB|COR|DEF|DIM|OPC|OPP|PAR|FOG|MSI|MII|MFI|MSF|MIF|MFF|PLE|PLI|PLF|SQL|SQE|GRD|PRE)\\b'
       name: 'keyword.control.tags.mkq'
   'comentario':
-      begin: '(\\-\\-)'
+      begin: '(^\\-\\-)'
       end: '($)'
       name: 'comment.line.double-dash.mkq'
       patterns: [
@@ -87,6 +90,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
         }
         {
           include: '#etx'
+        }
+        {
+          include: '#stx'
         }
         {
           include: '#bel'
@@ -117,6 +123,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
         }
         {
           include: '#etx'
+        }
+        {
+          include: '#stx'
         }
         {
           include: '#bel'
@@ -155,6 +164,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
           include: '#etx'
         }
         {
+          include: '#stx'
+        }
+        {
           include: '#bel'
         }
         {
@@ -181,6 +193,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
           }
           {
             include: '#etx'
+          }
+          {
+            include: '#stx'
           }
           {
             include: '#bel'
@@ -219,6 +234,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
           }
           {
             include: '#etx'
+          }
+          {
+            include: '#stx'
           }
           {
             include: '#bel'
@@ -263,6 +281,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
             include: '#etx'
           }
           {
+            include: '#stx'
+          }
+          {
             include: '#bel'
           }
           {
@@ -304,6 +325,9 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
             include: '#etx'
           }
           {
+            include: '#stx'
+          }
+          {
             include: '#bel'
           }
           {
@@ -326,14 +350,20 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
           }
         ]
       'numericos':
-          match: '(\\.|\\,)*([0-9])+(\\.|\\,)*'
-          name: 'keyword.numeric.decimal.mkq'
+            match: '(\\.|\\,)*([0-9])+(\\.|\\,)*'
+            name: 'keyword.numeric.decimal.mkq'
+
       'eot':
-             match: '[\u0004]' # A regular expression that matches some content. Optional
-             name: 'inv.character.eot.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
-       'etx':
+            match: '[\u0004]' # A regular expression that matches some content. Optional
+            name: 'inv.character.eot.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+
+      'etx':
             match: '[\u0003]' # A regular expression that matches some content. Optional
             name: 'inv.character.etx.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
+
+      'stx':
+            match: '[\u0002]' # A regular expression that matches some content. Optional
+            name: 'inv.character.stx.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
 
       'bel':
             match: '[\u0007]' # A regular expression that matches some content. Optional
