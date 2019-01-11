@@ -5,33 +5,31 @@
     'description': """
     Pode receber parâmetros e é utilizada para encabeçar a tabela de dados (e o título do relatório impresso).
     Caso não informada, [CAB] assume o conteúdo definido na tag [TIT].
-    Se o texto de [CAB] iniciar com @@, a barra de busca da janela contendo os dados resultantes do script definido em [SQL] será subtraída (bem como os respectivos botões).
-    Caso inicie com @@@, além da barra, a linha contadora de registros (do rodapé) também será suprimida.
 
     Exemplo:
       [CAB]
-      @@@Relação de Itens
+      Relação de Itens
     """
 
   '[CAR]':
     'prefix': 'car'
     'body': '[CAR]\n${1:#L}\n${2:#T}\n${3:#R}\n${4:Cabeçalho do PDF}\n$0'
     'description': """
-    Define o que deve ser impresso no cabeçalho/rodapé da(s) página(s) do arquivo PDF.
+    Define o que deve ser impresso no cabeçalho de XLS ou cabeçalho/rodapé da(s) página(s) do arquivo PDF.
     A fonte utilizada será, caso não estabelecida em um comando select , a mesma definida para o rodapé.
-    Para imprimir em todas as páginas, o conteúdo deve ser precedido pelo caracter *.
+    Para imprimir em todas as páginas do PDF, o conteúdo deve ser precedido pelo caracter *.
 
-    Três metacomandos estão disponíveis: #L, #T, #R
+    Três metacomandos estão disponíveis somente para PDF: #L, #T, #R
 
     *#L - Imprime logotipo padrão no cabeçalho, em todas as páginas
     *#T - Imprime título padrão no cabeçalho, em todas as páginas
     *#R - Imprime rodapé padrão, em todas as páginas
 
     Exemplo:
-      [CAR]
-    *#L --- Imprime logotipo padrão no cabeçalho, em todas as páginas
-    *#T --- Imprime título padrão no cabeçalho, em todas as páginas
-    *#R --- Imprime rodapé padrão, em todas as páginas
+    [CAR]
+    *#L
+    *#T
+    *#R
     Número de linhas a serem impressas: [LINHAS]
     Opção: {[OPP]}
     *select to_char(sysdate,'dd/mm/yyyy HH24:mi') "YY#32", rownum "XX#15" from dual connect by level <4
@@ -94,17 +92,17 @@
 
   '[DIM]':
     'prefix': 'dim'
-    'body': '[DIM]\n${1:75}:${2:0}:${3:0}:${4:25}:${5:70}:${6:15}\n$0'
+    'body': '[DIM]\n${1:75}:${2:0}:${3:0}:${4:25}:${5:70}:${6:15}:${7:100}\n$0'
     'description': """
     Esta tag define a área útil da tela a ser utilizada pelo MKQ (além de definir o comportamento do grid da tabela de dados).
-    É opcional e pode receber SEIS parâmetros separados por dois pontos.
+    É opcional e pode receber SETE parâmetros separados por dois pontos.
 
     Default:
-    75 : 0 : 0 : 25 : 70 : 15
+    75 : 0 : 0 : 25 : 70 : 15 : 100
 
     DETALHE:
 
-    • O primeiro paramêtro define o percentual da largura da tela que deverá ser utilizado pelo formulário do Janela Opções (nossa sugestão é 98)
+    • O primeiro paramêtro define o percentual da largura da tela que deverá ser utilizado pelo formulário do Janela Opções (nossa sugestão é 98).
     • O segundo parâmetro indica se a largura das colunas serão proporcionalizadas nesta tela ou se deverão ser fixas com aplicação de barra de rolagem horizontal, se necessário.
       Quando este valor for "0" (zero) as colunas serão proporcionalizadas.
       Quando este valor for maior que zero (normalmente usamos 15) a largura das colunas será resultante da multiplicação da largura definida nos labels do [SQL] por este fator informado (no caso, 15)
@@ -117,6 +115,10 @@
     • O quinto paramêtro define, opcionalmente, o percentual da altura da tela que deverá ser utilizado pelo formulário do Janela Opções
       Se for menor do que 70 (padrão) a tela será centralizada verticalmente.
     • O sexto define, opcionalmente, a espessura a ser aplicada em caso de barras de rolagem no GRID de dados, se não for informado, assume 15 (padrão).
+    • Define, opcionalmente, o fator de redimensionamento dos elementos na tela (120 aumentará em 20%).
+
+    OBS: Caso a largura e a altura sejam 100, o MKQ assume a tela inteira.
+
     Exemplo:
       [DIM]
       98 : 15 : 4 : 60
@@ -168,15 +170,20 @@
 
   '[GRD]':
     'prefix': 'grd'
-    'body': '[GRD]\n[FC]:${2:Tahoma}-${3:0}-${4:12}\n[FT]:${2:Tahoma}-${3:0}-${4:12}\n${5:[1]: Itens}\n$0'
+    'body': '[GRD]\n${1:[OC]:}\n${2:[FL]: N}\n[FC]:${3:Tahoma}-${4:0}-${5:12}\n[FT]:${3:Tahoma}-${4:0}-${5:12}\n${6:[1]: Itens}\n$0'
     'description': """
-    Esta tag permite redefinir a fonte padrão do cabeçalho do grid de dados (resultante da tag [SQL]) e/ou definir cabeçalhos com múltiplas linhas (agrupamento).
-    As subtags [FT] e [FC] permitem definir as fontes a serem utilizadas para o cabeçalho do grid de dados (tag [SQL]) e do grid de cabeçalho (comando UNION_TABLE da tag [SQL]).
-    Caso a fonte não seja não definida (tanto na subtag [FT] quanto na [FC]), o padrão assumido será Tahoma-0-12.
+    Esta tag permite alterar diversas características do GRID.
+    As subtags [FT] e [FC] permitem definir as fontes a serem utilizadas para o cabeçalho do grid de dados (tag [SQL]) e do grid de cabeçalho (comando UNION_TABLE da tag [SQL]), respectivamente.
+    Caso a fonte não seja não definida (tanto na subtag [FT] quanto na [FC]), o padrão assumido será <b>Tahoma-0-12</b>.
     As subtags de fontes seguem o padrão Nome da fonte-Tipo (0=Normal, 1=Negrito, 2=Itálico, 3=Ambos)-Tamanho.
+    A subtag [OC] permite ocultar o cabeçalho (com C) ou o cabeçalho e o rodapé (com CR).
+    Ao utilizar essa tag os botões aparecem na parte inferior do GRID (caso queira ocultar, verifique a documentação do [OPC]).
+    A subtag [FL] permite realizar buscas em colunas ocultas caso seu conteúdo comece com S (o padrão é somente em colunas visíveis).
 
     Exemplo:
       [GRD]
+      [OC]: C
+      [FL]: SIM
       [FT]: Courier New-2-10
       [FC]: Courier New-2-10
       [01]: Quantidade
@@ -255,12 +262,14 @@
     É possível definir a localização dos botões com as Palavras Reservadas [$BARRA$] e [$POPUP$].
     A Palavra Reservada [$BARRA$] quando usada sozinha faz com que o botão apareça somente na barra de busca da janela, e a [$POPUP$] por sua vez, no botão direito do mouse. Caso nenhuma das Palavras Reservadas seja utilizada, o botão aparecerá tanto na barra quanto no botão direito do mouse.
     Após a definição da localização dos botões, na validação, é possível utilizar os parâmetros internos [$LIN$], [$COL$], [$COLNAME$], [$CELL$] e [PLE].
+    Caso possua uma linha com HIDDEN, suprime os botões padrões.
     OBS: Somente o [PLE] guarda a informação de mais de uma linha/célula, os demais parâmetros internos somente guardam a informação da última célula selecionada.
 
     Sintaxe:
     Identificador : Imagem : Label : Sair (fechar form) : Localização & Validação
 
     Exemplo:
+      HIDDEN
       [OPC]
       OPC01: %L/1 : Executar ação 1      : Sair
       OPC02: %L/2 : Numero da Coluna     : N : [$POPUP$]  [$COL$] = 2
@@ -414,10 +423,15 @@
     'description': """
     [SQL]
     Instrução SQL que será executada para geração da consulta e preenchimento do grid.
-    Além de utilizar os resultantes dos parâmetros [PAR] na cláusula WHERE,  podem ser exploradas algumas funcionalidades como edição/formatação/totalizadores (com base no label do campo) e cores/imagens (com base no conteúdo do campo).
+    Além de utilizar os resultantes dos parâmetros [PAR] na cláusula WHERE, podem ser exploradas algumas funcionalidades como edição/formatação/totalizadores (com base no label do campo) e cores/imagens (com base no conteúdo do campo).
 
     Alguns labels e caracteres especiais na definição dos campos podem ser utilizados como forma de explorar mais profundamente esta tag:
     <b>DRILL#0, REFRESH#0, $ID#0, $, #, @, [01], UNION_TABLE_n</b>
+
+    O caractere # indica que será definida uma formatação:
+    Ele pode ser seguido de N (numérico com duas decimais), I (numérico inteiro), D (data) ou C (texto centralizado).
+    Numéricos serão alinhados à direita, datas centralizadas e demais ocorrências (não definidas) à esquerda.
+    O tipo C pode ser usado para colunas que contenham informação de imagens.
     -----
     [SQL]
     select id "$ID#0", '#MKQ:Modelos/ModeloA' DRILL#0,
@@ -427,6 +441,16 @@
            (select texto from tmp_teste_edt where ID=X.TMP_TESTE_EDT_ID) "Superior#30$6", id id#0
     from tmp_teste_edt X
     order by id
+
+    Uso de DATAS:
+    Após a definição da dimensão do campo data, usar uma vírgula e, após a mesma, definir a formatação (conforme padrão Oracle):
+
+    select sysdate “Data#D20,<b>dd/mm/yyyy hh24:mi:ss</b>” from dual
+
+    O string dd/mm/yyyy hh24:mi:ss não precisa estar completo, uma parte apenas pode ser definida, como por exemplo:
+    hh24:mi:ss, hh24:mi, dd/mm/yy, yyyy-hh24:mi, etc...
+
+    Como default, caso nada seja passado, teremos <b>dd/mm/yyyy</b>.
 
     Uso de UNION_TABLE_n:
     Este comando permite dividir o bloco SQL em dois grids distintos (inclusive, com número de colunas distintas).
