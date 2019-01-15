@@ -81,7 +81,7 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
       match: '\\b(MKQ|PAP|ETQ|QTD|MRG|LEI|PDF|CAR|EDT|VDD|TIT|CAB|COR|DEF|DIM|OPC|OPP|PAR|FOG|MSI|MII|MFI|MSF|MIF|MFF|PLE|PLI|PLF|SQL|SQE|GRD|PRE)\\b'
       name: 'keyword.control.tags.mkq'
   'comentario':
-      begin: '(^\\-\\-)'
+      begin: '(^\\s*\\-\\-)'
       end: '($)'
       name: 'comment.line.double-dash.mkq'
       patterns: [
