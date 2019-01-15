@@ -1181,12 +1181,12 @@
   'if simples (Oracle)':
     'prefix': 'if'
     'body': 'if ${1:condição} then\n\t${2:Faz algo;}\nend if;\n$0'
-    'description': 'Inclui uma condicional simples de PL/SQL.\nEX:\nif a = b then\n\totm_trace_pr(\'Verdadeiro\');\nend;'
+    'description': 'Inclui uma condicional simples de PL/SQL.\nEX:\nif a = b then\n\totm_trace_pr(\'Verdadeiro\');\nend if;'
 
   'if com else (Oracle)':
     'prefix': 'ife'
     'body': 'if ${1:condição} then\n\t${2:Faz algo;}\nelse\n\t${3:Faz outro algo;}\nend if;\n$0'
-    'description': 'Inclui uma condicional com else (PL/SQL).\nEX:\nif a = b then\n\totm_trace_pr(\'Verdadeiro\');\nelse\n\totm_trace_pr(\'Falso\');\nend;'
+    'description': 'Inclui uma condicional com else (PL/SQL).\nEX:\nif a = b then\n\totm_trace_pr(\'Verdadeiro\');\nelse\n\totm_trace_pr(\'Falso\');\nend if;'
 
   'Case simples (Oracle)':
     'prefix': 'case'
