@@ -17,7 +17,7 @@
     'description': """
     Define o que deve ser impresso no cabeçalho de XLS ou cabeçalho/rodapé da(s) página(s) do arquivo PDF.
     A fonte utilizada será, caso não estabelecida em um comando select , a mesma definida para o rodapé.
-    Para imprimir em todas as páginas do PDF, o conteúdo deve ser precedido pelo caracter *.
+    Para imprimir em todas as páginas do PDF, o conteúdo deve ser precedido pelo caractere *.
 
     Três metacomandos estão disponíveis somente para PDF: #L, #T, #R
 
@@ -55,7 +55,8 @@
     'body': '[DEF]\n[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
     'description': """
     Permite definirmos parâmetros para substituição em todo MKQ.
-    Deve ser a primeira TAG definida no MKQ e seus identificadores seguem o padrão de parâmetros externos: [$IDENTIFICADOR$].
+    Recomenda-se que seja a primeira tag definida no MKQ.
+    Seus identificadores seguem o padrão de parâmetros externos e devem, portanto, estar delimitados por [$ $].
 
     Sintaxe:
       Identificador : Conteúdo
@@ -102,27 +103,26 @@
 
     DETALHE:
 
-    • O primeiro paramêtro define o percentual da largura da tela que deverá ser utilizado pelo formulário do Janela Opções (nossa sugestão é 98)
+    • Define o percentual da largura da tela que deverá ser utilizado pelo formulário de grid (nossa sugestão é 98).
     • O segundo parâmetro indica se a largura das colunas serão proporcionalizadas nesta tela ou se deverão ser fixas com aplicação de barra de rolagem horizontal, se necessário.
       Quando este valor for "0" (zero) as colunas serão proporcionalizadas.
-      Quando este valor for maior que zero (normalmente usamos 15) a largura das colunas será resultante da multiplicação da largura definida nos labels do [SQL] por este fator informado (no caso, 15)
-      e uma barra de rolagem horizontal poderá ser apresentada (se necessário)
+      Quando este valor for maior que zero (normalmente usamos 15) a largura das colunas será resultante da multiplicação da largura definida nos labels do [SQL] por este fator informado (no caso, 15) e uma barra de rolagem horizontal poderá ser apresentada (se necessário).
     • O terceiro parâmetro só é considerado se o segundo parâmetro for diferente de zero.
       Este parâmetro indica o número de colunas a fixar na lateral esquerda.
       Lembre que as colunas ocultas (com dimensão ZERO, caso existam) também devem ser contadas.
-    • O quarto parâmetro, opcionalmente, a altura das linhas da table. Nosso default é 25 (valor assumido quando parâmetro não for informado).
-      A alteração da altura pode ser útil quando há necessidade de apresentar imagens/desenhos como informação resultante do [SQL]
-    • O quinto paramêtro define, opcionalmente, o percentual da altura da tela que deverá ser utilizado pelo formulário do Janela Opções
+    • O quarto parâmetro define, opcionalmente, a altura das linhas do grid. Nosso default é 25 (valor assumido quando parâmetro não for informado).
+      A alteração da altura pode ser útil quando há necessidade de apresentar imagens/desenhos como informação resultante do [SQL].
+    • O quinto paramêtro define, , opcionalmente, o percentual da altura da tela que deverá ser utilizado pelo formulário do grid.
       Se for menor do que 70 (padrão) a tela será centralizada verticalmente.
     • O sexto define, opcionalmente, a espessura a ser aplicada em caso de barras de rolagem no grid de dados, se não for informado, assume 15 (padrão).
-    • Define, opcionalmente, o fator de redimensionamento dos elementos na tela (120 aumentará em 20%).
+    • O sétimo define, opcionalmente, o fator de redimensionamento dos elementos na tela (120 aumentará em 20%).
 
     Para uso total da tela, basta parametrizar as duas dimensões (largura e altura) com valor igual a 100.
-    Obviamente que o uso total da tela ocorrerá apenas no grid (uma vez que a tela de parâmetros pode ter seu dimensionamento definido pelo último parâmetro da tag [DIM]).
-
-    Exemplo:
     [DIM]
     100:0:0:60:100:40:250
+
+    Obviamente que o uso total da tela ocorrerá apenas no grid
+    (uma vez que a tela de parâmetros pode ter seu dimensionamento definido pelo último parâmetro da tag [DIM]).
     """
 
   '[EDT]':
@@ -139,8 +139,10 @@
     Ao utilizar TYPE seguido do operador '-', o texto do campo a ser editado não será selecionado.
 
     Exemplo:
-     [EDT]
-      1 : TX-  : 100  :    : TMP_TESTE_EDT : TEXTO  : Texto : R
+    [EDT]
+    1 : TX   : 100  :  : TMP_TESTE_EDT : TEXTO  : Texto : R
+
+    1 : TX-  : 100  :  : TMP_TESTE_EDT : TEXTO  : Texto : R
 
     """
 
@@ -293,9 +295,13 @@
     Deve ser utilizado em conjunto com as tags [PLE] e [SQL]. A tag [PLF] será executada somente após o clique em um dos botões do grid.
     Se o identificador for CTRL_V, a opção de colar será habilitada no grid (embora nenhum botão adicional seja apresentado).
     É possível definir a localização dos botões com as Palavras Reservadas [$BARRA$] e [$POPUP$].
-    A Palavra Reservada [$BARRA$] quando usada sozinha faz com que o botão apareça somente na barra de busca da janela, e a [$POPUP$] por sua vez, no botão direito do mouse. Caso nenhuma das Palavras Reservadas seja utilizada, o botão aparecerá tanto na barra quanto no botão direito do mouse.
+    A Palavra Reservada [$BARRA$] quando usada sozinha faz com que o botão apareça somente na barra de busca da janela, e a [$POPUP$] por sua vez, no botão direito do mouse.
+    Caso nenhuma das Palavras Reservadas seja utilizada, o botão aparecerá tanto na barra quanto no botão direito do mouse.
     Após a definição da localização dos botões, na validação, é possível utilizar os parâmetros internos [$LIN$], [$COL$], [$COLNAME$], [$CELL$] e [PLE].
     OBS: Somente o [PLE] guarda a informação de mais de uma linha/célula, os demais parâmetros internos somente guardam a informação da última célula selecionada.
+
+    Para o uso da múltiplas linhas usamos '+>' no inicio de cada OPC.
+    Obs: Caso utilize '+>' em um OPC, deverá ser utilizado em todos os OPCs criados.
 
     Sintaxe:
     Identificador : Imagem : Label : Sair (fechar form) : Localização & Validação
@@ -329,13 +335,16 @@
     Deve ser utilizada em conjunto com a tag [PAR].
     Se identificador for HIDDEN, os botões padrões serão suprimidos.
 
+    Para o uso da múltiplas linhas usamos '+>' no inicio de cada OPP.
+    Obs: Caso utilize '+>' em um OPP, deverá ser utilizado em todos os OPPs criados.
+
     Sintaxe:
     Identificador : Imagem : Label : Sair (fechar form)
 
     Exemplo:
       [OPP]
       #> instr('[$$$]', '$$$') = 0 and '[$$$]' <> '0'  <#
-      OPC01: %S/Nao : Excluir registro : Sair
+      OPP01: %S/Nao : Excluir registro : Sair
     """
 
   '[PDF]':
@@ -352,6 +361,7 @@
     • Z: indica se deve ou não zebrar as linhas do relatório
     • F: define fonte dos dados do relatório (se alguma célula possuir definição de fonte, será respeitada a definição)
     • H: indica se altura da linha deve ser automática (auto-ajustada) ou se deve obedecer a altura definida na tabela de dados
+    • V: apenas gera o arquivo PDF na área temporária do usuário, sem exibir o mesmo na tela
 
     Exemplo:
       [PDF]
@@ -371,8 +381,8 @@
     'description': """
     Utilizado em conjunto com [PLF].
     Seu conteúdo deverá ser o label da coluna de [SQL] definida na tag [PLE]. Seu conteúdo poderá ser utilizado em qualquer uma das seguintes tags:
-    [OPC],[MFI],[PLF] e [MFF].
-    Caso inicie com o caracter *, indica que múltiplos registros poderão ser selecionados (caso contrário, apenas um registro poderá ser selecionado).
+    [OPC], [MFI], [PLF] e [MFF].
+    Caso inicie com o caractere *, indica que múltiplos registros poderão ser selecionados (caso contrário, apenas um registro poderá ser selecionado).
     O conteúdo de [PLE] pode retornar:
     1. Conteúdo separado por vírgula em caso de múltiplos registros selecionados (Analisar o item 3);
     2. [PLE] em caso de nenhum registro selecionado;
@@ -395,8 +405,8 @@
     Bloco a ser executado após a tag [SQL].
     Caso não exista a tag [PLE] executa este bloco imediatamente após a execução de [SQL].
     Caso exista, só executa este bloco após o clique no botão de confirmação (ou em um dos botões definidos em [OPC]).
-    Este bloco pode possuir diversas cláusulas @> que podem ser executadas e validadas por #> <#.
-    Quando não definida, a cláusula @>SQL é assumida como default.
+    Este bloco pode possuir diversos comandos @> que podem ser executados e validados por #> <#.
+    Quando não definida, o comando @>SQL é assumido como default.
 
     Exemplo:
       [PLF]
@@ -410,9 +420,9 @@
     'prefix': 'pli'
     'body': '[PLI]\nbegin\n\t$1\nend;\n$0'
     'description': """
-    Bloco a ser executado antes da tag [SQL](e após a tag [PAR], caso a mesma exista).
-    Este bloco pode possuir diversas cláusulas @> que podem ser executadas e validadas por #> <#.
-    Quando não definida, a cláusula @>SQL é assumida como default.
+    Bloco a ser executado antes da tag [SQL] (e após a tag [PAR], caso a mesma exista).
+    Este bloco pode possuir diversos comandos @> que podem ser executados e validados por #> <#.
+    Quando não definida, o comando @>SQL é assumido como default.
 
     Exemplo:
       [PLI]
@@ -426,8 +436,8 @@
     'body': '[PRE]\nbegin\n\t\$1\nend;\n$0'
     'description': """
     Bloco a ser executado antes da tag [TIT].
-    Este bloco pode possuir diversas cláusulas @> que podem ser executadas e validadas por #> <#.
-    Quando não definida, a cláusula @>SQL é assumida como default.
+    Este bloco pode possuir diversos comandos @> que podem ser executados e validados por #> <#.
+    Quando não definida, o comando @>SQL é assumido como default.
 
     Exemplo:
       [PRE]
@@ -493,11 +503,25 @@
     Sintaxe:
       'MKQ:MKQ_a_ser_chamado' DRILL#0
 
-    Antes de "MKQ:" é possível utilizar:
-      #  - Oculta o MKQ chamador e atualiza o mesmo no retorno;
-      +# - Não oculta o MKQ chamador e atualiza o mesmo no retorno;
-      -  - Oculta o MKQ chamador e não atualiza o mesmo no retorno;
-    Caso não seja utilizado um dos modificadores acima, o MKQ chamador não será ocultado e nem atualizado.
+    Antes de "MKQ:" é possível a utilização de prefixos (#,+,-,*).
+    Observe a tabela abaixo:
+    +--------------------------------------------------+
+    |      Orientações em chamadas de novo MKQ         |
+    +---------+----------------------------+-----------+
+    |         |     Quanto à janela que    |           |
+    |         |     executou a chamada     |           |
+    | Prefixo +-------------+--------------+  Prefixo  |
+    |         |  Oculta na  |  Atualiza no |   Modal   |
+    |         |  chamada?   |    retorno?  |           |
+    |---------+-------------+--------------+-----------+
+    |         |     NÃO     |      NÃO     |    *      |
+    |---------+-------------+--------------+-----------+
+    |   #     |     SIM     |      SIM     |           |
+    |---------+-------------+--------------+-----------+
+    |   +     |     NÃO     |      SIM     |    *+     |
+    |---------+-------------+--------------+-----------+
+    |   -     |     SIM     |      NÃO     |           |
+    |---------+-------------+--------------+-----------+
 
     Após o nome do MKQ é possível inserir parâmetros separados por EOT, seguindo o padrão de EOTchaveEOTvalor.
 
@@ -537,7 +561,7 @@
     'description': """
     Define o título a ser apresentado na tela que receberá parâmetros.
     Normalmente esta tag não recebe validações, uma vez que quando a mesma é apresentada os parâmetros ainda não foram respondidos.
-    Se o texto finalizar com o caracter "#", ao fechar a janela no botão vermelho no topo esquerdo da tela, uma mensagem de confirmação será solicitada.
+    Se o texto finalizar com o caractere "#", ao fechar a janela no botão vermelho no topo esquerdo da tela, uma mensagem de confirmação será solicitada.
 
     Exemplo
       [TIT]
@@ -719,7 +743,7 @@
     Opcionalmente pode receber, como parâmetro adicional, o valor default (vide exemplo onde o valor default será 500).
     OBS: Caso não seja implementado um VDD para o parâmetro, a Suite se encarregará de implementar automaticamente um VDD para validação do valor mínimo e máximo.
 
-    Se o indicador casa decimais contiver o caracter B, uma barra de controle deslizante será apresentada.
+    Se o indicador casa decimais contiver o caractere B, uma barra de controle deslizante será apresentada.
     Se o indicador B estiver acompanhado de R, o refresh será dinâmico.
 
     Exemplo:
@@ -905,7 +929,23 @@
     Exemplo
       @>MKQ
       otm_prod/omrp/cad_oc_manEOT[$$$]EOT[PLE]EOT[$PLANO$]EOT[PLANO]
-    """
+
+      +--------------------------------------------------+
+      |      Orientações em chamadas de novo MKQ         |
+      +---------+----------------------------+-----------+
+      |         |     Quanto à janela que    |           |
+      |         |     executou a chamada     |           |
+      |         |  chamada?   |    retorno?  |           |
+      |---------+-------------+--------------+-----------+
+      |         |     NÃO     |      NÃO     |    *      |
+      |---------+-------------+--------------+-----------+
+      |   #     |     SIM     |      SIM     |           |
+      |---------+-------------+--------------+-----------+
+      |   +     |     NÃO     |      SIM     |    *+     |
+      |---------+-------------+--------------+-----------+
+      |   -     |     SIM     |      NÃO     |           |
+      |---------+-------------+--------------+-----------+
+"""
 
   '@>SQL':
     'prefix': 'cmdsql'
