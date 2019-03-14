@@ -213,7 +213,7 @@
     'prefix': 'fog'
     'body': '[FOG]\n${1:Arquivo}\n$0'
     'description': """Utilizada, opcionalmente, para determinar o local e nome do arquivo que contém as informações complementares para parâmetros tipo OG (vide [PAR]).
-    Quando a tag [FOG] não for especificada, o arquivo default será assumido (<b>Queries/Parameters.INI</b>).
+    Quando a tag [FOG] não for especificada, o arquivo default será assumido (Queries/Parameters.INI).
 
     Exemplo:
       [FOG]
@@ -528,11 +528,11 @@
     Uso de DATAS:
     Após a definição da dimensão do campo data, usar uma vírgula e, após a mesma, definir a formatação (conforme padrão Oracle):
 
-    select sysdate “Data#D20,<b>dd/mm/yyyy hh24:mi:ss</b>” from dual
+    select sysdate “Data#D20,dd/mm/yyyy hh24:mi:ss” from dual
 
     O string dd/mm/yyyy hh24:mi:ss não precisa estar completo, uma parte apenas pode ser definida, como por exemplo:
     hh24:mi:ss, hh24:mi, dd/mm/yy, yyyy-hh24:mi, etc...
-    Como default, caso nada seja passado, teremos <b>dd/mm/yyyy</b>.
+    Como default, caso nada seja passado, teremos dd/mm/yyyy.
 
     Uso de UNION_TABLE_n:
     Este comando permite dividir o bloco SQL em dois grids distintos (inclusive, com número de colunas distintas).
@@ -790,7 +790,7 @@
     Após a altura pode-se utilizar um N opcional para indicar que o TX não utilizará efetivamente a altura definida.
     Também é possível alterar o estilo da fonte utilizando outro BEL após a altura. Verifique a sintaxe abaixo:
 
-      [PARAMETRO]: Label BEL Altura BEL</b>(background/foreground/fonte/estilo da fonte / tamanho):  TX435: 50;U;[A-Z]|[0-9]
+      [PARAMETRO]: Label BEL Altura BEL (background/foreground/fonte/estilo da fonte / tamanho):  TX435: 50;U;[A-Z]|[0-9]
 
     Uso de Imagens no TX com Múltiplas Linhas:
     O parâmetro tipo texto pode uma imagem, passada no default do parâmetro, seguindo a seguinte sintaxe:
