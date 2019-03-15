@@ -3,12 +3,12 @@
     'prefix': 'cab'
     'body': '[CAB]\n${1:Cabeçalho}\n$0'
     'description': """
-    Pode receber parâmetros e é utilizada para encabeçar a tabela de dados (e o título do relatório impresso).
+    Pode receber parâmetros (sempre a segunda parte do parâmetro, equivalente a {[PARAMETRO]}) e é utilizada para encabeçar a tabela de dados (e o título do relatório impresso).
     Caso não informada, [CAB] assume o conteúdo definido na tag [TIT].
 
     Exemplo:
       [CAB]
-      Relação de Itens
+      Relação de Itens - [PARAMETRO]
     """
 
   '[CAR]':
