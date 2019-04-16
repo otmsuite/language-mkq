@@ -5,11 +5,11 @@
   "description": "Um pacote voltado à linguagem de MKQs da OTMSuite",
   "keywords": [
     "MKQ",
-    "OTMSuíte",
-    "Suíte",
+    "OTMSuite",
+    "Suite",
     "OTM"
   ],
-  "repository": "https://github.com/otmsuite/language-mkq",
+  "repository": "https://github.com/otm-stev/language-mkq",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0"
