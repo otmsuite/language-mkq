@@ -133,7 +133,7 @@
     Ao clicar no botão de retornar durante uma edição a mesma será cancelada.
     A sintaxe básica segue o padrão
     ID : TYPE : LENGTH : PARAMETERS : TABLE_NAME : COLUMN_NAME : USER_DESCRIPTION : REFRESH
-    mas seu conteúdo varia de acordo com o tipo de dado da coluna a ser editada (FL, CK, FK, DT, TX, NM, DC, PW, XX).
+    mas seu conteúdo varia de acordo com o tipo de dado da coluna a ser editada (CK, FK, DT, TX, NM, DC, PW, XX).
 
     TYPE
     Ao utilizar TYPE seguido do operador '-', o texto do campo a ser editado não será selecionado.
@@ -195,7 +195,7 @@
 
     Exemplo:
       [GRD]
-      [OC]: COF
+      [OC]: CROF
       [FL]: SIM
       [FT]: Courier New-2-10
       [FC]: Courier New-2-10
@@ -553,6 +553,28 @@
     Para isto, devemos usar a seguinte sintaxe: #IMG^Nome_da_imagem^W^H
     W e H são opcionais. Quando não informados será assumida a dimensão padrão de 19x19.
     Ao informar W e H poderá ser necessário aumentar a altura das linhas da tabela (vide tag [DIM]).
+
+    Uso de Cor/Fonte:
+    O padrão utilizado para background é RGB 254-254-254 (lembrando que temos linhas alternadas em 231-238-245) e para foreground 31-73-125.
+    A fonte padrão é Tahoma normal size 12.
+    Para alterar a cor/fonte de uma célula, basta preceder o conteúdo conforme a sintaxe {RB-GB-BB/RF-GF-BF/Fonte/Tipo/Tamanho}, onde
+    RB-GB-BB equivale ao RGB da cor para background, como por exemplo, 255-255-0 (amarelo). Se RB-GB-BB for igual a X-X-X será adotado o padrão;
+    RF-GF-BF equivale ao RGB da cor para foreground, como por exemplo, 150-75-0 (marrom). Se RF-GF-BF for igual a X-X-X será adotado o padrão;
+    Fonte é o nome da fonte (atente para que a fonte exista na máquina do usuário) como, por exemplo, Tahoma, Calibri, Arial, etc
+    Tipo é o valor de propriedade da fonte conforme: 0-normal, 1-negrito, 2-itálico, 3-itálico+negrito
+    Tamanho é size da fonte
+    Se o string de definição de cores/fontes estiver dentro de chaves duplas ( {{X-X-X/X-X-X/Fonte/Tipo/Size}} ) este padrão será aplicado a todos os
+    os campos da linha a partir do campo em questão
+    O último parâmetro pode, opcionalmente, definir uma altura para a linha onde o mesmo se encontra. Para isto, basta especificar Hn onde n é o
+    valor equivalente à altura da linha em questão. Observe que o parâmetro de altura definido em [DIM] equivale a todas as linhas e o parâmetro
+    definido aqui refere-se à linha específica onde o mesmo se encontra.
+
+    Uso de Totalizador:
+    O caractere @ indica que haverá uma linha de sumarização no cabeçalho da tabela/relatório
+    Este caractere poderá ser seguido de C (count), S (sum), M (max), N (min), A (avg).
+    Obviamente, S e A só devem ser usados para colunas numéricas!
+    Atenção: labels com caracteres especiais (como é o caso de @ ou de $) deve estar entre aspas duplas (") - aspas duplas e
+    NÃO duas aspas simples!
     """
 
   '[TIT]':
@@ -790,7 +812,7 @@
     Após a altura pode-se utilizar um N opcional para indicar que o TX não utilizará efetivamente a altura definida.
     Também é possível alterar o estilo da fonte utilizando outro BEL após a altura. Verifique a sintaxe abaixo:
 
-      [PARAMETRO]: Label BEL Altura BEL (background/foreground/fonte/estilo da fonte / tamanho):  TX435: 50;U;[A-Z]|[0-9]
+      [PARAMETRO]: Label BEL Altura BEL {background/foreground/fonte/estilo da fonte / tamanho}:  TX435: 50;U;[A-Z]|[0-9]
 
     Uso de Imagens no TX com Múltiplas Linhas:
     O parâmetro tipo texto pode uma imagem, passada no default do parâmetro, seguindo a seguinte sintaxe:
@@ -1081,6 +1103,7 @@
         #, -, @, $
     • Totalizadores no grid:
         @S, @C, @A, @M, @N
+
     • Define que a célula não terá seu conteúdo editável e pode definir tooltip text:
         !!!
     • Chamadas de MKQ
