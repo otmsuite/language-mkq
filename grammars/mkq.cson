@@ -185,7 +185,7 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
   'parameter-text':
       begin: '(\\{\\[)'
       # end: '(\\]\\}|$)'
-      end: '(\\]\\})'
+      end: '(\\]\\})|(?=\\\')|(?=%)'
       name: 'variable.parametro.text.mkq'
       patterns: [
           {
@@ -223,7 +223,7 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
     'parameter-id':
         begin: '(\\[)'
         # end: '(\\]|$)'
-        end: '(\\])'
+        end: '(\\])|(?=\\\')|(?=%)'
         name: 'variable.parametro.id.mkq'
         patterns: [
           {
@@ -308,7 +308,7 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
     'format':
         begin: '(\\{+[^\\[])'
         # end: '([^\\]]\\}+|$)'
-        end: '([^\\]]\\}+)'
+        end: '([^\\]]\\}+)|(?=\\\')|(?=%)'
         # match: '(\\{+[^\\[])([^\'\\"\\}]*)([^\\]]\\}+|$)'
         name: 'keyword.delimiter.format.mkq'
         patterns: [
