@@ -44,7 +44,7 @@ patterns: [ # An array of individual pattern declarations.
   #   include:'#numericos'
   # }
   {
-    match: '((@>)(SQL|MKQ|MKP|MKPT|EXE|XLS|GRF|ARQ|EML|WWW|WSV|CAB|DFM))' # A regular expression that matches some content. Optional
+    match: '((@>)(SQL|MKQ|MKPT|MKP|EXE|XLS|GRF|ARQ|EML|WWW|WSV|CAB|DFM))' # A regular expression that matches some content. Optional
     name: 'keyword.control.comandos.mkq' # A period-delimited list of classes that will be applied to the content identified by `match`. Optional
   }
   {
