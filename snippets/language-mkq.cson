@@ -293,10 +293,15 @@
     'description': """
     Permite acrescentar botões na janela da tabela de dados apresentados.
     Deve ser utilizado em conjunto com as tags [PLE] e [SQL]. A tag [PLF] será executada somente após o clique em um dos botões do grid.
+    Após o clique, o [OPC] é considerado como um parâmetro, podendo ser utilizado nos blocos [MFI], [PLF] e [MFF].
+    Seu conteúdo principal (ID), obtido através de [OPC], é equivalente ao identificador do botão clicado.
+    Seu conteúdo secundário (Texto), obtido através de {[OPC]}, é equivalente ao label do botão clicado.
+
     Se o identificador for CTRL_V, a opção de colar será habilitada no grid (embora nenhum botão adicional seja apresentado).
-    É possível definir a localização dos botões com as Palavras Reservadas [$BARRA$] e [$POPUP$].
-    A Palavra Reservada [$BARRA$] quando usada sozinha faz com que o botão apareça somente na barra de busca da janela, e a [$POPUP$] por sua vez, no botão direito do mouse.
-    Caso nenhuma das Palavras Reservadas seja utilizada, o botão aparecerá tanto na barra quanto no botão direito do mouse.
+    É possível definir a localização dos botões com as palavras reservadas [$BARRA$] e [$POPUP$].
+    A palavra reservada [$BARRA$] na validação do botão, quando usada sozinha, faz com que o botão apareça somente na barra de busca do grid.
+    Já a [$POPUP$] por sua vez, faz com que seja visível no botão direito do mouse.
+    Caso nenhuma das palavras reservadas seja utilizada, o botão aparecerá tanto na barra quanto no botão direito do mouse.
     Após a definição da localização dos botões, na validação, é possível utilizar os parâmetros internos [$LIN$], [$COL$], [$COLNAME$], [$CELL$] e [PLE].
     OBS: Somente o [PLE] guarda a informação de mais de uma linha/célula, os demais parâmetros internos somente guardam a informação da última célula selecionada.
 
@@ -316,15 +321,22 @@
       OPC06: %L/6 : ID do(s) Registro(s) : N : [$POPUP$] [PLE] in (1,5)
 
     Caso não se deseje apresentar nenhum botão, deve-se usar a tag HIDDEN.
-    Se esta cláusula for utilizada em conjunto com outros botões,
-    apenas os botões definidos pelo usuário serão apresentados, por exemplo:
+    Se este identificador for utilizado em conjunto com outros botões,
+    apenas os botões definidos pelo usuário serão apresentados.
+    Caso, mesmo com o HIDDEN, ainda deseje apresentar o botão de retornar, é possível adicionar o identificador RETURN.
 
+    Exemplo:
       [OPC]
       HIDDEN
+      RETURN
       OPC_START:      %SVGF/Regular/play-circle |@50-100-175:         Iniciar:        N
       OPC_PAUSE:      %SVGF/Regular/pause-circle|@50-100-175:         Interromper:    N
       OPC_STOP:       %SVGF/Regular/stop-circle |@50-100-175:         Finalizar:      N
       OPC_CLOSE:      %SVGF/Regular/times-circle|@50-100-175:         Sair:           S
+
+    Ainda podemos definir submenus nos botões. Utilizamos o mesmo padrão utilizado no menu para definir os subníveis de botões.
+    Se um botão começar com o identificador do botão anterior, seguido por um ".", então esse botão será subnível do botão anterior.
+    Atualmente a plataforma suporta apenas 2 níveis, o principal e mais um (para o submenu).
     """
 
   '[OPP]':
@@ -333,6 +345,9 @@
     'description': """
     Permite acrescentar botões de ação na tela de parâmetros (que normalmente possui apenas os botões Confirmar e Retornar).
     Deve ser utilizada em conjunto com a tag [PAR].
+    Após o clique, o [OPP] é considerado como um parâmetro, comumente sendo utilizado nos blocos [MII], [MIF], [PLI] e [SQL].
+    Seu conteúdo principal (ID), obtido através de <b>[OPP]</b>, é equivalente ao identificador do botão clicado.
+    Seu conteúdo secundário (Texto), obtido através de <b>{[OPP]}</b>, é equivalente ao label do botão clicado.
     Se identificador for HIDDEN, os botões padrões serão suprimidos.
 
     Para o uso da múltiplas linhas usamos '+>' no inicio de cada OPP.
@@ -462,6 +477,9 @@
     Também é utilizado para permitir que mais de um grid de dados seja exibido no relatório, porém através do #SELECT temos mais dinamicidade, podendo retornar um número indefinido de grids.
     O #select é suportado pelos 3 tipos de relatório, browser, planilha e PDF.
 
+    É possível realizar quebras de página no meio de determinado script.
+    Para isso, concatena-se um chr(12) na primeira célula visível da linha que irá para a próxima página.
+
     Exemplo:
       [SQE]
       select ID "Código#5", Texto "Descrição#30"
@@ -491,6 +509,7 @@
     from tmp_teste_edt X
     order by id
 
+    Uso de Formatação de Coluna:
     O caractere # no nome da coluna indica que será definida uma formatação:
     Ele pode ser seguido de N (numérico com duas decimais), I (numérico inteiro), D (data) ou C (texto centralizado).
     Numéricos serão alinhados à direita, datas centralizadas e demais ocorrências (não definidas) à esquerda.
@@ -503,7 +522,7 @@
     Sintaxe:
       'MKQ:MKQ_a_ser_chamado' DRILL#0
 
-    Antes de "MKQ:" é possível a utilização de prefixos (#,+,-,*).
+    Antes de "MKQ:" é possível a utilização de prefixos (#,+,-,*,$).
     Observe a tabela abaixo:
     +--------------------------------------------------+
     |      Orientações em chamadas de novo MKQ         |
@@ -537,7 +556,7 @@
     Uso de UNION_TABLE_n:
     Este comando permite dividir o bloco SQL em dois grids distintos (inclusive, com número de colunas distintas).
     O segundo bloco (definido após o comando UNION_TABLE_n) será apresentado em um grid acima do grid de dados.
-    O valor n define o número de linhas fixas no grid.
+    O valor n define o número de linhas fixas no grid. Caso o valor n não seja informado, será 1.
 
     Exemplo:
     select rownum "Cod#10", 1 "Teste#N10@S", 'Teste '||rownum "Descrição#80"
@@ -600,7 +619,13 @@
     Variável [$EDT$] refere-se ao parâmetro (quando em [PAR]) em edição.
     Variável [$n$] refere-se à coluna n ([EDT]) em edição.
 
-    Em caso de erro no banco, a mensagem retornada será do erro do banco, e não do VDD.
+    • O ID deve ser igual ao ID do [EDT] em caso de utilização no [EDT]. Caso for utilizado no [PAR], o ID do VDD deve ser informado no parâmetro a ser validado (vide sintaxe padrão dos parâmetros).
+    • O WHERE é a condição a ser utilizada para a validação. O elemento (parâmetro ou EDT) a ser validado é válido quando a condição retornar FALSO.
+    • O TIPO pode ser E ou W, onde W é warning (alerta) e E é error (erro).
+      O tipo W de um elemento inválido apenas mostrará o alerta, porém permitirá o prosseguimento da operação.
+      O tipo E de um elemento inválido mostrará um erro ao tentar dar sequência à operação e não permitirá prosseguir.
+    • A MENSAGEM é o que será exibido quando o elemento for inválido e o usuário tentar prosseguir com a operação.
+      Em caso de erro no banco, a mensagem retornada será do erro do banco, e não do VDD.
 
     Sintaxe:
       +> ID : WHERE : TIPO : MENSAGEM
@@ -726,6 +751,10 @@
 
     A sequência de parâmetros, contudo, não é tão complexa como parece à primeira vista. Veja:
     TABELA; COLUNAS_LOV; PK||chr(9)||DESCR; WHERE+ORDER : DEFAULT : VDD : POSICIONAMENTO
+
+    É possível tornar o campo da fk digitável. Dessa forma conseguimos filtrar os valores que aparecerão na LOV (lista de valores) ou mesmo selecionar algum registro sem ter que abrir a LOV.
+    Para isso, utilizamos a seguinte sintaxe na FK:
+    TABELA; CAMPOS_LOV; PK||chr(9)||DESCR; WHERE and 8=8^CAMPO_DE_BUSCA : DEFAULT
 
     Exemplo:
       [SPACE]: @TableSpace:  FK: *ALL_TABLES; distinct tablespace_name
@@ -925,6 +954,7 @@
     'body': '@>MKP\n${1:MakePanel A Executar}\n$0'
     'description': """
     Permite executar uma aplicação MakePanel, dentro da dimensão definida para o MKQ.
+    É possível abrir alguma opção do menu ao adicionar o prefixo $ ao nome do mkq (deve deve estar presente no .MYO).
 
     Exemplo:
       @>MKP
@@ -936,6 +966,7 @@
     'body': '@>MKPT\n${1:MakePanel A Executar}\n$0'
     'description': """
     Permite executar uma aplicação MakePanel, sem vínculo com a dimensão do MKQ.
+    É possível abrir alguma opção do menu ao adicionar o prefixo $ ao nome do mkq (deve deve estar presente no .MYO).
 
     Exemplo:
       @>MKPT
@@ -947,6 +978,7 @@
     'body': '@>MKQ\n${1:MakeQuery A Executar}\n$0'
     'description': """
     Permite a execução de outro MKQ.
+    É possível abrir alguma opção do menu ao adicionar o prefixo $ ao nome do mkq (deve deve estar presente no .MYO).
 
     Exemplo
       @>MKQ
@@ -1098,22 +1130,65 @@
     A OTMSuite possui alguns operadores e caracteres especiais utilizados em vários contextos.
 
     • Limites de condicional:
-        #> <#, ##> <##
+        As chamadas condicionais globais (resolvidas logo na primeira leitura do arquivo) são delimitadas por ##> <##
+        As condicionais internas (resolvidas no início da execução de cada bloco) são delimitadas por #> <#
     • Permite selecionar mais de um registro quando no PLE ou FK, por exemplo:
         *
     • Modificadores dos campos de parâmetro:
         #, -, @, $
     • Totalizadores no grid:
         @S, @C, @A, @M, @N
-
     • Define que a célula não terá seu conteúdo editável e pode definir tooltip text:
         !!!
+    • Tooltip e TX de múltiplas linhas:
+        O BEL pode ser utilizado entre dois valores, em determinada célula do grid, para informar que ela terá tooltip.
+          O primeiro valor será o conteúdo da célula e o segundo será o tooltip.
+        O BEL pode ser utilizado no label do TX para definir que o mesmo será de múltiplas linhas (caixa de texto).
     • Chamadas de MKQ
         !, +, -, #
     • Separador utilizado em FK e REFRESH
         chr(9)
     • Estrutura de tópicos
-        +-
+        +- como nome de coluna para definir que será uma estrutura de tópicos.
+        !@! no início da célula (da coluna +-) para definir que o nível iniciará recolhido.
+    """
+
+  'Caminhos':
+    'prefix': 'docpath'
+    'body': ''
+    'description': """
+    Existem alguns atalhos de caminhos que podem ser utilizados na plataforma OTMSuite em geral. São eles:
+    • %HOMEPATH%
+    • %TEMP% (ou %TMP%)
+
+    Exemplo:
+      [PLI]
+      @>EXE
+      %HOMEPATH%/exportar.pdf
+    """
+
+  'HTML':
+    'prefix': 'dochtml'
+    'body': ''
+    'description': """
+    Alguns componentes da plataforma OTMSuite permitem que utilizemos html. São eles:
+    • GRID: Para utilização no grid é só definir o conteúdo da célula como <HTML><BODY>Conteúdo</BODY></BODY>
+    • TIT/CAB: Apenas adicionar o html.
+
+    Nota: As versões de HTML e CSS suportadas são respectivamente 3.2 (Wilbur) e 1.0 (conforme o suportado pelo Java Swing).
+
+    Exemplo:
+      select to_char(A), to_char(B),
+          '<HTML><BODY>'||
+            '<font style="background-color:rgba(0,0,0,0.0); " face="courier new"; size="4">'||
+              replace(trim(lpad('X',A-1,'X')),'X',chr(38)||'nbsp;') ||'</font>'||
+            '<font style="background-color:#0000ff;" face="courier new"; size="4"; color="#0000ff">'||
+              trim(lpad('X',B-A+1,'X'))||'</font>'||
+          '</BODY></HTML>' Barra
+      from (
+        select A, trunc(DBMS_RANDOM.VALUE(A,100)) B
+        from (select trunc(DBMS_RANDOM.VALUE(0,80)) A from dual connect by level <100)
+      )
     """
 
   'Imagens':
