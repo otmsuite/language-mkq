@@ -71,25 +71,25 @@
       [$PAR1$]
     """
 
-    'linha [DEF]':
-      'prefix': 'def+'
-      'body': '[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
-      'description': """
-      Permite definirmos parâmetros para substituição em todo MKQ.
-      Deve ser a primeira TAG definida no MKQ e seus identificadores seguem o padrão de parâmetros externos: [$IDENTIFICADOR$].
+  'linha [DEF]':
+    'prefix': 'def+'
+    'body': '[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
+    'description': """
+    Permite definirmos parâmetros para substituição em todo MKQ.
+    Deve ser a primeira TAG definida no MKQ e seus identificadores seguem o padrão de parâmetros externos: [$IDENTIFICADOR$].
 
-      Sintaxe:
-        Identificador : Conteúdo
+    Sintaxe:
+      Identificador : Conteúdo
 
-      Exemplo:
-        [DEF]
-        --Define o [$PAR1$]
-        [$PAR1$] : [PARAMETRO1]: Label: TX250: 100: Default
+    Exemplo:
+      [DEF]
+      --Define o [$PAR1$]
+      [$PAR1$] : [PARAMETRO1]: Label: TX250: 100: Default
 
-        [PAR]
-        --Substituirá pelo conteúdo definido na tag [DEF]
-        [$PAR1$]
-      """
+      [PAR]
+      --Substituirá pelo conteúdo definido na tag [DEF]
+      [$PAR1$]
+    """
 
   '[DIM]':
     'prefix': 'dim'
@@ -259,7 +259,7 @@
   '[MIF]':
     'prefix': 'mif'
     'body': '[MIF]\n${1:Mensagem}\n$0'
-    'description': """'Mensagem apresentada após a execução de [PLI].'
+    'description': """Mensagem apresentada após a execução de [PLI].
 
     Exemplo:
       [MIF]
@@ -270,7 +270,7 @@
   '[MSI]':
     'prefix': 'msi'
     'body': '[MSI]\n${1:Mensagem}\n$0'
-    'description': """'Mensagem condicional apresentada antes da execução de [SQL].'
+    'description': """Mensagem condicional apresentada antes da execução de [SQL].
 
     Exemplo:
       [MSI]
@@ -860,7 +860,7 @@
     """
 
   '@>ARQ':
-    'prefix': 'cmdarq'
+    'prefix': 'arqcmd'
     'body': '@>ARQ\n${1:Arquivo}; ${2:[SESSAO]}; ${3:I/O}; ${4:Mensagem}; ${5:Tipo} ${6:;Grava se tem erro (SIM ou NAO)}\n$0'
     'description': """
     Permite ler/gravar um arquivo (texto, xml, csv, etc), de acordo com a sintaxe:
@@ -882,7 +882,7 @@
     """
 
   '@>CAB':
-    'prefix': 'cmdcab'
+    'prefix': 'cabcmd'
     'body': '@>CAB\n${1:Cabeçalho}\n$0'
     'description': """
     Altera o texto do cabeçalho da tela do MENU.
@@ -892,7 +892,7 @@
     """
 
   '@>DFM':
-    'prefix': 'cmddfm'
+    'prefix': 'dfmcmd'
     'body': '@>DFM\n${1:Origem} : ${2:Destino} : ${3:Ação (Copiar, Mover, Deletar ou Listar)} : ${4:Interação/Hidden (Sim ou Não)} : ${5:Subpastas (Sim ou Não)} : ${6:Erros na Tela (Sim ou Não)}\n$0'
     'description': """
     Permite copiar, mover ou apagar arquivos de/para pastas do SO ou listar o conteúdo de uma pasta.
@@ -924,7 +924,7 @@
     """
 
   '@>EML':
-    'prefix': 'cmdeml'
+    'prefix': 'emlcmd'
     'body': '@>EML\n${1:ID}\n$0'
     'description': """
     Dispara e-mails (todos se ID=0 ou específico, conforme ID passado).
@@ -935,7 +935,7 @@
     """
 
   '@>EXE':
-    'prefix': 'cmdexe'
+    'prefix': 'execmd'
     'body': '@>EXE\n${1:Aplicação A Executar}\n$0'
     'description': """
     Permite a execução de um programa fora do ambiente da OTMSuite.
@@ -950,7 +950,7 @@
     """
 
   '@>MKP':
-    'prefix': 'cmdmkp'
+    'prefix': 'mkpcmd'
     'body': '@>MKP\n${1:MakePanel A Executar}\n$0'
     'description': """
     Permite executar uma aplicação MakePanel, dentro da dimensão definida para o MKQ.
@@ -962,7 +962,7 @@
     """
 
   '@>MKPT':
-    'prefix': 'cmdmkpt'
+    'prefix': 'mkptcmd'
     'body': '@>MKPT\n${1:MakePanel A Executar}\n$0'
     'description': """
     Permite executar uma aplicação MakePanel, sem vínculo com a dimensão do MKQ.
@@ -974,7 +974,7 @@
     """
 
   '@>MKQ':
-    'prefix': 'cmdmkq'
+    'prefix': 'mkqcmd'
     'body': '@>MKQ\n${1:MakeQuery A Executar}\n$0'
     'description': """
     Permite a execução de outro MKQ.
@@ -1004,7 +1004,7 @@
 """
 
   '@>SQL':
-    'prefix': 'cmdsql'
+    'prefix': 'sqlcmd'
     'body': '@>SQL\nbegin\n\t$1\nend;\n$0'
     'description': """
     Permite executar um bloco PL/SQL padrão .
@@ -1017,7 +1017,7 @@
     """
 
   '@>WSV':
-    'prefix': 'cmdwsv'
+    'prefix': 'wsvcmd'
     'body': '@>WSV\n${1:Webservice A Executar}\n$0'
     'description': """
     Permite a execução de um serviço.
@@ -1033,7 +1033,7 @@
     """
 
   '@>WWW':
-    'prefix': 'cmdwww'
+    'prefix': 'wwwcmd'
     'body': '@>WWW\n${1:URL}\n$0'
     'description': """
     Permite a abertura de arquivo (URL).
@@ -1044,7 +1044,7 @@
     """
 
   '@>XLS':
-    'prefix': 'cmdxls'
+    'prefix': 'xlscmd'
     'body': '@>XLS\n${1:[ARQUIVO]}; ${2:[ABA]}; ${3:[SESSAO]}; ${4:[COLUNA]}\n$0'
     'description':
       """
@@ -1056,7 +1056,7 @@
       """
 
   '@>GRF':
-    'prefix': 'cmdgrf'
+    'prefix': 'grfcmd'
     'body': '@>GRF\n<ARQ>${1:CAMINHO}\n<DAD>${2:LEGENDA1} = ${3:VALOR1}, ${4:LEGENDA2} = ${5:VALOR2}\n<GRF>${6:TIPO DE GRAFICO}\n<TIT>${7:TITULO}\n<COR>${8:245-239-246}\n<DIM>${9:LARGURA}, ${10:ALTURA}\n$0'
     'description':"""
       Utilizado para gerar uma imagem de gráfico no formato .png.
@@ -1110,7 +1110,7 @@
     'description': 'Adiciona uma condicional global verificando se existe o parâmetro [$$$].'
 
   'Bloco de código <<>>':
-    'prefix': '<<'
+    'prefix': 'bloco'
     'body': '<< ${1:Descrição do Bloco}\n\t$2\n>>\n$0'
 
   'Formatação Célula':
