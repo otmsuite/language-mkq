@@ -346,8 +346,8 @@
     Permite acrescentar botões de ação na tela de parâmetros (que normalmente possui apenas os botões Confirmar e Retornar).
     Deve ser utilizada em conjunto com a tag [PAR].
     Após o clique, o [OPP] é considerado como um parâmetro, comumente sendo utilizado nos blocos [MII], [MIF], [PLI] e [SQL].
-    Seu conteúdo principal (ID), obtido através de <b>[OPP]</b>, é equivalente ao identificador do botão clicado.
-    Seu conteúdo secundário (Texto), obtido através de <b>{[OPP]}</b>, é equivalente ao label do botão clicado.
+    Seu conteúdo principal (ID), obtido através de [OPP], é equivalente ao identificador do botão clicado.
+    Seu conteúdo secundário (Texto), obtido através de {[OPP]}, é equivalente ao label do botão clicado.
     Se identificador for HIDDEN, os botões padrões serão suprimidos.
 
     Para o uso da múltiplas linhas usamos '+>' no inicio de cada OPP.
@@ -479,6 +479,9 @@
 
     É possível realizar quebras de página no meio de determinado script.
     Para isso, concatena-se um chr(12) na primeira célula visível da linha que irá para a próxima página.
+
+    Também é possível reiniciar a contagem de paginação.
+    Para isso, concatena-se um chr(12) seguido de um @ na primeira célula <b>visível</b> da linha que irá para a próxima página.
 
     Exemplo:
       [SQE]
