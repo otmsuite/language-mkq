@@ -306,7 +306,7 @@ repository:{ # An array of rules. If you're going to be referencing one bit of c
           }
         ]
     'format':
-        begin: '(\\{+[^\\[])'
+        begin: '(\\{+[^\\[|^\\\'])'
         # end: '([^\\]]\\}+|$)'
         end: '([^\\]]\\}+)|(?=\\\')|(?=%)'
         # match: '(\\{+[^\\[])([^\'\\"\\}]*)([^\\]]\\}+|$)'
