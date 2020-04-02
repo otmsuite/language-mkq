@@ -209,17 +209,6 @@
       from dual
     """
 
-  '[FOG]':
-    'prefix': 'fog'
-    'body': '[FOG]\n${1:Arquivo}\n$0'
-    'description': """Utilizada, opcionalmente, para determinar o local e nome do arquivo que contém as informações complementares para parâmetros tipo OG (vide [PAR]).
-    Quando a tag [FOG] não for especificada, o arquivo default será assumido (Queries/Parameters.INI).
-
-    Exemplo:
-      [FOG]
-      ./Queries/Modelos/Modelo_A.INI
-    """
-
   '[MFI]':
     'prefix': 'mfi'
     'body': '[MFI]\n${1:Mensagem}\n$0'
