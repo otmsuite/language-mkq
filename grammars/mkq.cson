@@ -6,10 +6,7 @@ scopeName: 'source.mkq' # <scope> should be a short, unique indicator for the la
 name: 'mkq' # The title that will show up in grammar selection and on your status bar.
 fileTypes: [ # An array of file extensions.
   'mkq'
-  'mkp'
   'etq'
-  'act'
-  'scr'
   'myo'
 ]
 foldingStartMarker: '(<<)' # A regular expression that checks for the start of a foldable area (such as `{`).
