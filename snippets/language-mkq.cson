@@ -8,7 +8,7 @@
 
     Exemplo:
       [CAB]
-      Relação de Itens - [PARAMETRO]
+      Tabela - [PARAMETRO]
     """
 
   '[CAR]':
@@ -30,17 +30,17 @@
     *#L
     *#T
     *#R
-    Número de linhas a serem impressas: [LINHAS]
+    Número de linhas: [LINHAS]
     Opção: {[OPP]}
-    *select to_char(sysdate,'dd/mm/yyyy HH24:mi') "YY#32", rownum "XX#15" from dual connect by level <4
+    *select to_char(sysdate,'dd/mm/yyyy HH24:mi') "YY#32" from dual connect by level <4
     """
 
   '[COR]':
     'prefix': 'cor'
     'body': '[COR]\n${1:225}-${2:230}-${3:245}/${4:030}-${5:70}-${6:120}\n$0'
     'description': """
-    Opcional (normalmente não usada - assumindo, portanto, as cores padrões).
-    Quando utilizada, altera as cores do cabeçalho e rodapé, conforme degradê do primeiro RGB para o segundo RGB.
+    Opcional (quando não usada assume as cores padrões).
+    Altera as cores do cabeçalho e rodapé, conforme degradê do primeiro RGB para o segundo.
 
     Default:
     225-230-245/030-70-120
@@ -54,7 +54,7 @@
     'prefix': 'def'
     'body': '[DEF]\n[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
     'description': """
-    Permite definirmos parâmetros para substituição em todo MKQ.
+    Permite a definição de conteúdos padrões para substituição em todo MKQ.
     Recomenda-se que seja a primeira tag definida no MKQ.
     Seus identificadores seguem o padrão de parâmetros externos e devem, portanto, estar delimitados por [$ $].
 
@@ -69,13 +69,26 @@
       [PAR]
       --Substituirá pelo conteúdo definido na tag [DEF]
       [$PAR1$]
+
+    Uso de [$DEBUG$]:
+    Quando qualquer entrada da tag DEF contiver a palavra reservada [$DEBUG$], o debugging será ativado.
+    Quando o debugging estiver ativado, todo script de banco a ser executado nas tags EDT e VDD será gravado na tabela OTM_DADOS_EXTERNOS.
+    O registro terá as seguintes informações:
+      CONTEUDO = Script a ser executado
+      SESSAO = Sessão atual
+      TIPO = OTM_DEBUG
+      ARQUIVO = Bloco onde deverá ser executado o script
+
+    Exemplo:
+    [DEF]
+    [$DEBUG$]
     """
 
   'linha [DEF]':
     'prefix': 'def+'
     'body': '[\$${1:PARAMETRO}\$] : ${2:Conteúdo}\n$0'
     'description': """
-    Permite definirmos parâmetros para substituição em todo MKQ.
+    Permite a definição de conteúdos padrões para substituição em todo MKQ.
     Deve ser a primeira TAG definida no MKQ e seus identificadores seguem o padrão de parâmetros externos: [$IDENTIFICADOR$].
 
     Sintaxe:
@@ -105,23 +118,23 @@
 
     • Define o percentual da largura da tela que deverá ser utilizado pelo formulário de grid (nossa sugestão é 98).
     • O segundo parâmetro indica se a largura das colunas serão proporcionalizadas nesta tela ou se deverão ser fixas com aplicação de barra de rolagem horizontal, se necessário.
-      Quando este valor for "0" (zero) as colunas serão proporcionalizadas.
-      Quando este valor for maior que zero (normalmente usamos 15) a largura das colunas será resultante da multiplicação da largura definida nos labels do [SQL] por este fator informado (no caso, 15) e uma barra de rolagem horizontal poderá ser apresentada (se necessário).
+      Quando este valor for 0 (zero) as colunas serão proporcionalizadas.
+      Quando este valor for maior que zero (normalmente 15) a largura das colunas será resultante da multiplicação da largura definida nos labels do [SQL] por este fator informado e uma barra de rolagem horizontal poderá ser apresentada (se necessário).
     • O terceiro parâmetro só é considerado se o segundo parâmetro for diferente de zero.
       Este parâmetro indica o número de colunas a fixar na lateral esquerda.
-      Lembre que as colunas ocultas (com dimensão ZERO, caso existam) também devem ser contadas.
-    • O quarto parâmetro define, opcionalmente, a altura das linhas do grid. Nosso default é 25 (valor assumido quando parâmetro não for informado).
-      A alteração da altura pode ser útil quando há necessidade de apresentar imagens/desenhos como informação resultante do [SQL].
-    • O quinto paramêtro define, , opcionalmente, o percentual da altura da tela que deverá ser utilizado pelo formulário do grid.
+      Colunas ocultas (com dimensão ZERO) também devem ser contadas.
+    • O quarto parâmetro define, opcionalmente, a altura das linhas do grid. O default é 25.
+      A alteração da altura pode ser útil quando há necessidade de apresentar imagens como informação resultante do [SQL].
+    • O quinto paramêtro define, opcionalmente, o percentual da altura da tela que deverá ser utilizado pelo formulário do grid.
       Se for menor do que 70 (padrão) a tela será centralizada verticalmente.
-    • O sexto define, opcionalmente, a espessura a ser aplicada em caso de barras de rolagem no grid de dados, se não for informado, assume 15 (padrão).
+    • O sexto define, opcionalmente, a espessura a ser aplicada em caso de barras de rolagem no grid de dados. Se não for informado, assume 15 (padrão).
     • O sétimo define, opcionalmente, o fator de redimensionamento dos elementos na tela (120 aumentará em 20%).
 
     Para uso total da tela, basta parametrizar as duas dimensões (largura e altura) com valor igual a 100.
     [DIM]
     100:0:0:60:100:40:250
 
-    Obviamente que o uso total da tela ocorrerá apenas no grid
+    O uso total da tela ocorrerá apenas no grid
     (uma vez que a tela de parâmetros pode ter seu dimensionamento definido pelo último parâmetro da tag [DIM]).
     """
 
@@ -136,7 +149,7 @@
     mas seu conteúdo varia de acordo com o tipo de dado da coluna a ser editada (CK, FK, DT, TX, NM, DC, PW, XX).
 
     TYPE
-    Ao utilizar TYPE seguido do operador '-', o texto do campo a ser editado não será selecionado.
+    Ao utilizar TYPE seguido do operador -, o texto do campo a ser editado não será selecionado.
 
     Exemplo:
     [EDT]
@@ -176,6 +189,18 @@
     'body': '${1:ID}:\t DC: :${2:ID1};${3:Texto1};${4:ID2};${5:Texto2};${6:ID0};${7:Texto0}\t :${8:TABLE_NAME}:${9:COLUMN_NAME}:${10:USER_DESCRIPTION}:${11:R}\n$0'
     'description': 'Campo editável tipo lista de opções.'
 
+  'XX [EDT]':
+    'prefix': 'edtxx'
+    'body': '${1:ID}:\t XX: :${2:select}: : :X\n$0'
+    'description': """
+    Campo editável variável de acordo com o resultado do select.
+    O resultado do select deve ser uma linha de EDT começando pelo tipo.
+    No lugar de : como separador, deve-se usar chr(9).
+
+    Exemplo:
+      1: XX: : select 'TX'||chr(9)||'100;S'||chr(9)||chr(9)||' TMP_TESTE_EDT'||chr(9)||'TEXTO'||chr(9)||'Texto'||chr(9)||'R' from dual: : :X
+    """
+
   '[GRD]':
     'prefix': 'grd'
     'body': '[GRD]\n${1:[OC]:}\n${2:[FL]: N}\n[FC]:${3:Tahoma}-${4:0}-${5:12}\n[FT]:${3:Tahoma}-${4:0}-${5:12}\n${6:[1]: Itens}\n$0'
@@ -183,15 +208,15 @@
     Esta tag permite redefinir diversas configurações do grid e definir agrupamentos no cabeçalho.
 
     A subtag [OC] pode receber:
-      • C - para ocultar o cabeçalho
-      • R - para ocultar o rodapé
-      • O - para ocultar os botões de ordenação
-      • F - para ocultar os botões de filtrar
+      • C - oculta o cabeçalho
+      • R - oculta o rodapé
+      • O - oculta os botões de ordenação
+      • F - oculta os botões de filtrar
     A subtag [FL] permite realizar buscas em colunas ocultas caso seu conteúdo comece com S (o padrão é somente em colunas visíveis).
     As subtags [FT] e [FC] permitem definir as fontes a serem utilizadas para o cabeçalho do grid de dados (tag [SQL]) e do grid de cabeçalho (comando UNION_TABLE da tag [SQL]).
-    Caso a fonte não seja não definida (tanto na subtag [FT] quanto na [FC]), o padrão assumido será Tahoma-0-12.
+    Caso a fonte não seja não definida, o padrão assumido será Tahoma-0-12.
     As subtags de fontes seguem o padrão Nome da fonte-Tipo (0=Normal, 1=Negrito, 2=Itálico, 3=Ambos)-Tamanho.
-    Para utilizar cabeçalhos com múltiplas linhas (agrupamento), define-se uma tag que será utilizada no início do nome da coluna do grid, seguido de ":" e o nome do agrupamento a ser utilizado.
+    Para utilizar cabeçalhos com múltiplas linhas (agrupamento), define-se uma tag que será utilizada no início do nome da coluna do grid, seguido de : e o nome do agrupamento a ser utilizado.
 
     Exemplo:
       [GRD]
@@ -202,7 +227,7 @@
       [01]: Quantidade
 
       [SQL]
-      select rownum "Cod#10", 'Item '||rownum "Descrição#30",
+      select rownum "Cod#10",
            1 "Valor#N10@S",
            2 "[01]Venda#N10@S",
            3 "[01]Compra#N10@S"
@@ -237,11 +262,11 @@
   '[MII]':
     'prefix': 'mii'
     'body': '[MII]\n${1:Mensagem}\n$0'
-    'description': """Mensagem condicional apresentada antes da execução de [PLI].'
+    'description': """Mensagem condicional apresentada antes da execução de [PLI].
 
     Exemplo:
       [MII]
-      #> instr('[$$$]', '$$$') = 0 and '[$$$]'<>'0' and '[OPP]'='OPC02' <#
+      #> instr('[$$$]', '$$$') = 0 and '[OPP]'='OPC02' <#
       Confirma atualização de registro?
     """
 
@@ -303,11 +328,11 @@
     Exemplo:
       [OPC]
       OPC01: %L/1 : Executar ação 1      : Sair
-      OPC02: %L/2 : Numero da Coluna     : N : [$POPUP$]  [$COL$] = 2
-      OPC03: %L/3 : Numero da Linha      : N : [$POPUP$]  [$LIN$] = 3
+      OPC02: %L/2 : Número da Coluna     : N : [$POPUP$]  [$COL$] = 2
+      OPC03: %L/3 : Número da Linha      : N : [$POPUP$]  [$LIN$] = 3
       OPC04: %L/4 : Nome da Coluna       : N : [$POPUP$] '[$COLNAME$]'='YYY'
       OPC05: %L/5 : Conteúdo da Célula   : N : [$POPUP$] '[$CELL$]'='xx'
-      OPC06: %L/6 : ID do(s) Registro(s) : N : [$POPUP$] [PLE] in (1,5)
+      OPC06: %L/6 : ID do(s) Registro(s) : N : [$BARRA$] [PLE] in (1,5)
 
     Caso não se deseje apresentar nenhum botão, deve-se usar a tag HIDDEN.
     Se este identificador for utilizado em conjunto com outros botões,
@@ -320,20 +345,21 @@
       RETURN
       OPC_START:      %SVGF/Regular/play-circle |@50-100-175:         Iniciar:        N
       OPC_PAUSE:      %SVGF/Regular/pause-circle|@50-100-175:         Interromper:    N
-      OPC_STOP:       %SVGF/Regular/stop-circle |@50-100-175:         Finalizar:      N
-      OPC_CLOSE:      %SVGF/Regular/times-circle|@50-100-175:         Sair:           S
 
     Ainda podemos definir submenus nos botões. Utilizamos o mesmo padrão utilizado no menu para definir os subníveis de botões.
-    Se um botão começar com o identificador do botão anterior, seguido por um ".", então esse botão será subnível do botão anterior.
-    Atualmente a plataforma suporta apenas 2 níveis, o principal e mais um (para o submenu).
+    Se um botão começar com o identificador do botão anterior, seguido por um ".", ele será subnível do botão anterior.
+    A plataforma suporta apenas 2 níveis, o principal e mais um (para o submenu).
     """
 
   '[OPP]':
     'prefix': 'opp'
-    'body': '[OPP]\n${1:Identificador}: ${2:Imagem} : ${3:label} : ${4:Sair}\n$0'
+    'body': '[OPP]\n${1:Identificador}: ${2:Imagem} : ${3:label} : ${4:Sair} : ${5:Limpar}\n$0'
     'description': """
     Permite acrescentar botões de ação na tela de parâmetros (que normalmente possui apenas os botões Confirmar e Retornar).
     Deve ser utilizada em conjunto com a tag [PAR].
+    Caso use "Limpar", ao retornar para a tela de parâmetros os parâmetros voltarão aos seus valores defaults.
+    Por padrão, os parâmetros mantêm os valores alterados.
+
     Após o clique, o [OPP] é considerado como um parâmetro, comumente sendo utilizado nos blocos [MII], [MIF], [PLI] e [SQL].
     Seu conteúdo principal (ID), obtido através de [OPP], é equivalente ao identificador do botão clicado.
     Seu conteúdo secundário (Texto), obtido através de {[OPP]}, é equivalente ao label do botão clicado.
@@ -463,7 +489,7 @@
     OBS: Caso seja utilizado o UNION_TABLE, no browser e planilha serão considerados o select da tag [SQL].
 
     Uso de #SELECT:
-    Também é utilizado para permitir que mais de um grid de dados seja exibido no relatório, porém através do #SELECT temos mais dinamicidade, podendo retornar um número indefinido de grids.
+    Também é utilizado para permitir que mais de um grid de dados seja exibido no relatório. Através do #SELECT temos mais dinamicidade, podendo retornar um número indefinido de grids.
     O #select é suportado pelos 3 tipos de relatório, browser, planilha e PDF.
 
     É possível realizar quebras de página no meio de determinado script.
@@ -476,7 +502,6 @@
       [SQE]
       select ID "Código#5", Texto "Descrição#30"
       from tmp_teste_edt
-      order by 2
     """
 
   '[SQL]':
@@ -494,23 +519,22 @@
     -----
     [SQL]
     select id "$ID#0", '#MKQ:Modelos/ModeloA' DRILL#0,
-           ID "Código#5", Texto "Descrição#30$1", 'xx' Z#5, null XXX#0, Data "Data#D10$2",
-           '#IMG^%D/Sinal'||decode(Ativo,1,'VDE','VRM') "Ativo#C8$3", Numero "Valor#N8$4@S", 'yy' Y#5,
+           ID "Código#5", Texto "Descrição#30$1", Data "Data#D10$2",
+           '#IMG^%D/Sinal'||decode(Ativo,1,'VDE','VRM') "Ativo#C8$3", Num "Valor#N8$4@S",
            decode(Situacao,1,'Aberto',2,'Fechado',0,'Cancelado') "Situação#10$5",
-           (select texto from tmp_teste_edt where ID=X.TMP_TESTE_EDT_ID) "Superior#30$6", id id#0
+           (select texto from tmp_teste_edt where ID=X.TMP_TESTE_EDT_ID) "Superior#30$6"
     from tmp_teste_edt X
-    order by id
 
     Uso de Formatação de Coluna:
     O caractere # no nome da coluna indica que será definida uma formatação:
-    Ele pode ser seguido de N (numérico com duas decimais), I (numérico inteiro), D (data) ou C (texto centralizado).
-    Numéricos serão alinhados à direita, datas centralizadas e demais ocorrências (não definidas) à esquerda.
-    O tipo C pode ser usado para colunas que contenham informação de imagens.
-    Após essa definição, ainda poderá ser definida uma largura para a coluna.
+    Pode ser seguido de N (numérico com duas decimais), I (numérico inteiro), D (data) ou C (texto/imagem centralizado).
+    Numéricos serão alinhados à direita, datas centralizadas e demais ocorrências à esquerda.
+    Após essa definição, pode ser definida uma largura para a coluna.
+
+    O uso de # no início do conteúdo de uma coluna do tipo numérico (N ou I) permite inserção de texto na mesma.
 
     Uso de DRILL:
-    Pode-se chamar outro MKQ através de dois cliques em determinada linha do grid.
-    Para tal, usa-se uma coluna com o nome DRILL#0 contendo o MKQ a ser aberto e possíveis parâmetros.
+    Para chamar outro MKQ através de dois cliques em determinada linha do grid, usa-se uma coluna com o nome DRILL#0 contendo o MKQ a ser aberto e possíveis parâmetros.
     Sintaxe:
       'MKQ:MKQ_a_ser_chamado' DRILL#0
 
@@ -537,55 +561,57 @@
     Após o nome do MKQ é possível inserir parâmetros separados por EOT, seguindo o padrão de EOTchaveEOTvalor.
 
     Uso de DATAS:
-    Após a definição da dimensão do campo data, usar uma vírgula e, após a mesma, definir a formatação (conforme padrão Oracle):
+    Após a definição da dimensão do campo data, usar uma vírgula seguida da formatação (conforme padrão Oracle).
+    Default: dd/mm/yyyy
 
     select sysdate “Data#D20,dd/mm/yyyy hh24:mi:ss” from dual
 
-    O string dd/mm/yyyy hh24:mi:ss não precisa estar completo, uma parte apenas pode ser definida, como por exemplo:
-    hh24:mi:ss, hh24:mi, dd/mm/yy, yyyy-hh24:mi, etc...
-    Como default, caso nada seja passado, teremos dd/mm/yyyy.
-
     Uso de UNION_TABLE_n:
     Este comando permite dividir o bloco SQL em dois grids distintos (inclusive, com número de colunas distintas).
-    O segundo bloco (definido após o comando UNION_TABLE_n) será apresentado em um grid acima do grid de dados.
-    O valor n define o número de linhas fixas no grid. Caso o valor n não seja informado, será 1.
+    O segundo bloco será apresentado em um grid acima do grid de dados.
+    n define o número de linhas fixas no grid. Default: 1.
 
     Exemplo:
-    select rownum "Cod#10", 1 "Teste#N10@S", 'Teste '||rownum "Descrição#80"
-    from dual
-    connect by level < 100
+    select rownum "Cod#10", 1 "Teste#N10@S", 'T'||rownum "Descrição#80"
+    from dual connect by level<100
     UNION_TABLE_4
-    select rownum "Cod#10", 1 "Teste#N10@S", 'Teste '||rownum "Descrição#80", to_char(sysdate, 'HH24:mi:ss') "Teste#20", rownum*3/2 "XXX#N"
-    from dual
-    connect by level < 8
+    select rownum "Cod#10", 1 "Teste#N10@S", 'T'||rownum "Descrição#80", 'Texto' "Teste#20"
+    from dual connect by level<8
 
     Uso de IMAGENS:
-    Uma imagem pode ser apresentada em cada célula resultante do script.
-    Para isto, devemos usar a seguinte sintaxe: #IMG^Nome_da_imagem^W^H
-    W e H são opcionais. Quando não informados será assumida a dimensão padrão de 19x19.
-    Ao informar W e H poderá ser necessário aumentar a altura das linhas da tabela (vide tag [DIM]).
+    Uma imagem pode ser apresentada nas células do grid usando a seguinte sintaxe: #IMG^Nome_da_imagem^W^H
+    W e H, quando não informados, assumem default de 19x19.
+    Ao informar W e H poderá ser necessário aumentar a altura da linha (tag [DIM]).
 
-    Uso de Cor/Fonte:
+    Formatação de célula:
     O padrão utilizado para background é RGB 254-254-254 (lembrando que temos linhas alternadas em 231-238-245) e para foreground 31-73-125.
     A fonte padrão é Tahoma normal size 12.
     Para alterar a cor/fonte de uma célula, basta preceder o conteúdo conforme a sintaxe {RB-GB-BB/RF-GF-BF/Fonte/Tipo/Tamanho}, onde
     RB-GB-BB equivale ao RGB da cor para background, como por exemplo, 255-255-0 (amarelo). Se RB-GB-BB for igual a X-X-X será adotado o padrão;
     RF-GF-BF equivale ao RGB da cor para foreground, como por exemplo, 150-75-0 (marrom). Se RF-GF-BF for igual a X-X-X será adotado o padrão;
-    Fonte é o nome da fonte (atente para que a fonte exista na máquina do usuário) como, por exemplo, Tahoma, Calibri, Arial, etc
-    Tipo é o valor de propriedade da fonte conforme: 0-normal, 1-negrito, 2-itálico, 3-itálico+negrito
+    A Fonte deve estar instalada na máquina.
+    Tipo refere-se à fonte: 0-normal, 1-negrito, 2-itálico, 3-itálico+negrito
     Tamanho é size da fonte
-    Se o string de definição de cores/fontes estiver dentro de chaves duplas ( {{X-X-X/X-X-X/Fonte/Tipo/Size}} ) este padrão será aplicado a todos os
-    os campos da linha a partir do campo em questão
-    O último parâmetro pode, opcionalmente, definir uma altura para a linha onde o mesmo se encontra. Para isto, basta especificar Hn onde n é o
-    valor equivalente à altura da linha em questão. Observe que o parâmetro de altura definido em [DIM] equivale a todas as linhas e o parâmetro
-    definido aqui refere-se à linha específica onde o mesmo se encontra.
+    Se a string de formatação estiver dentro de chaves duplas, a definição será aplicada para a linha
+    inteira a partir do campo em questão
+    O último parâmetro pode definir a altura da linha onde o mesmo se encontra. Para isto, basta especificar Hn onde n é
+    a altura da linha em questão. Esta definição prevalece sobre a definida na tag [DIM].
 
     Uso de Totalizador:
     O caractere @ indica que haverá uma linha de sumarização no cabeçalho da tabela/relatório
     Este caractere poderá ser seguido de C (count), S (sum), M (max), N (min), A (avg).
-    Obviamente, S e A só devem ser usados para colunas numéricas!
-    Atenção: labels com caracteres especiais (como é o caso de @ ou de $) deve estar entre aspas duplas (") - aspas duplas e
-    NÃO duas aspas simples!
+    S e A só devem ser usados para colunas numéricas.
+    Labels com caracteres especiais (como @ ou $) devem estar entre aspas duplas.
+
+    Modo de seleção:
+    É possível alterar o modo como os registros de uma tabela são selecionados.
+    Para isso, usa-se uma coluna com o nome (!) seguido de um identificador
+    Sintaxe: ID "(!)Selecionados#5"
+
+    Os registros serão gravados na OTM_MENSAGEM com a sessão atual, TIPO igual ao nome da coluna e MSG igual ao conteúdo da coluna.
+    Seguindo o exemplo, MSG conteria o ID do registro selecionado e o TIPO seria igual a "Selecionados"
+
+    Caso utilizado em conjunto de um PLE permitindo seleção múltipla, serão habilitados dois botões no GRID (para selecionar e deselecionar os registros).
     """
 
   '[TIT]':
@@ -593,8 +619,7 @@
     'body': '[TIT]\n${1:Título da janela#}\n$0'
     'description': """
     Define o título a ser apresentado na tela que receberá parâmetros.
-    Normalmente esta tag não recebe validações, uma vez que quando a mesma é apresentada os parâmetros ainda não foram respondidos.
-    Se o texto finalizar com o caractere "#", ao fechar a janela no botão vermelho no topo esquerdo da tela, uma mensagem de confirmação será solicitada.
+    Se o texto finalizar com o caractere #, ao fechar a janela uma mensagem de confirmação será solicitada.
 
     Exemplo
       [TIT]
@@ -614,7 +639,7 @@
     • O ID deve ser igual ao ID do [EDT] em caso de utilização no [EDT]. Caso for utilizado no [PAR], o ID do VDD deve ser informado no parâmetro a ser validado (vide sintaxe padrão dos parâmetros).
     • O WHERE é a condição a ser utilizada para a validação. O elemento (parâmetro ou EDT) a ser validado é válido quando a condição retornar FALSO.
     • O TIPO pode ser E ou W, onde W é warning (alerta) e E é error (erro).
-      O tipo W de um elemento inválido apenas mostrará o alerta, porém permitirá o prosseguimento da operação.
+      O tipo W de um elemento inválido mostrará o alerta, porém permitirá prosseguir.
       O tipo E de um elemento inválido mostrará um erro ao tentar dar sequência à operação e não permitirá prosseguir.
     • A MENSAGEM é o que será exibido quando o elemento for inválido e o usuário tentar prosseguir com a operação.
       Em caso de erro no banco, a mensagem retornada será do erro do banco, e não do VDD.
@@ -652,7 +677,7 @@
     'body': '[PAR]\n$0'
     'description': """
     Os parâmetros a seguir permitem a criação de uma interface de entrada de dados para o usuário.
-    Embora sejam utilizados, principalmente, na tag [PAR], podem ser utilizados (com sintaxe similar) na tag [EDT].
+    Embora sejam utilizados, na tag [PAR], podem ser utilizados (com sintaxe similar) na tag [EDT].
 
     Tipologias possíveis:
     FL, CK, FK, DT, TX, NM, DC, OG, PW
@@ -692,7 +717,6 @@
     Parâmetro tipo lista de opções.
 
     Recebe em sua notação uma sequência de informações separadas por ponto e vírgula (ou ^).
-    Sua notação será utilizada de forma similar a um decode (daí a sigla DC).
     Para cada par de dados, o primeiro será utilizado nos scripts enquanto que o segundo será apresentado na tela e no cabeçalho (quando utilizado).
     A primeira opção é assumida como default (se nenhuma for passada).
 
@@ -725,11 +749,11 @@
        8 ou 10 Caracteres (sem ou com separador):
          DDMMAAAA ou DD/MM/AAAA
     • Uso de operadores:
-       Agem em uma expressão sempre sobre uma data, sendo possível adicionar (+) ou subtrair (-) Dias, Semanas, Meses, Anos informando a inicial do correspondente logo após a quantidade; EX: -2A (menos 2 anos)
+       Agem em uma expressão sempre sobre uma data, sendo possível adicionar ou subtrair Dias, Semanas, Meses, Anos informando a inicial do correspondente logo após a quantidade; EX: -2A (menos 2 anos)
     • Uso de modificadores:
-       Agem em uma expressão sempre sobre uma data, sendo possível modificar a data para o Primeiro ou Último dia do(a) Semana, Mês ou Ano. Modificadores possíveis (PS, PM, PA, US, UM, UA). EX: HUM (último dia do mês referente a data de hoje (“H”))
+       Agem em uma expressão sempre sobre uma data, sendo possível modificar a data para o Primeiro ou Último dia do(a) Semana, Mês ou Ano. Modificadores possíveis: PS, PM, PA, US, UM, UA. EX: HUM (último dia do mês referente a data de hoje (“H”))
     • Uso de expressões:
-       As expressões são sempre resolvidas da esquerda para direita, pegando sempre duplas (uma data e um operador ou modificador) e resultando sempre em uma data;'
+       As expressões são sempre resolvidas da esquerda para direita, pegando sempre duplas (uma data e um operador ou modificador) e resultando em uma data;
 
     Exemplo:
       [DATA]: Data : DT250 : NH-5; H+5; to_char(to_date(\'[$EDT$]\'), \'d\') in (2,3,4,5,6) : +1
@@ -747,6 +771,9 @@
     É possível tornar o campo da fk digitável. Dessa forma conseguimos filtrar os valores que aparecerão na LOV (lista de valores) ou mesmo selecionar algum registro sem ter que abrir a LOV.
     Para isso, utilizamos a seguinte sintaxe na FK:
     TABELA; CAMPOS_LOV; PK||chr(9)||DESCR; WHERE and 8=8^CAMPO_DE_BUSCA : DEFAULT
+
+    Caso Tabela comece com *, habilita seleção múltipla.
+    Caso Tabela comece com !, altera o modo de seleção.
 
     Exemplo:
       [SPACE]: @TableSpace:  FK: *ALL_TABLES; distinct tablespace_name
@@ -779,14 +806,14 @@
 
     Recebe em sua notação:
       • Número de casas decimais;
-      • Limite inferior/mínimo (será mostrado em tooltiptext);
-      • Limite superior/máximo (será mostrado em tooltiptext).
+      • Limite inferior/mínimo (mostrado em tooltiptext);
+      • Limite superior/máximo (mostrado em tooltiptext).
 
-    Observar que entre o número de casas decimais, valor mínimo e valor máximo da faixa, o separador é ponto e vírgula!
-    Opcionalmente pode receber, como parâmetro adicional, o valor default (vide exemplo onde o valor default será 500).
+    Entre o número de casas decimais, valor mínimo e valor máximo da faixa, o separador é ponto e vírgula.
+    Opcionalmente pode receber o valor default (vide exemplo onde o valor default será 500).
     OBS: Caso não seja implementado um VDD para o parâmetro, a Suite se encarregará de implementar automaticamente um VDD para validação do valor mínimo e máximo.
 
-    Se o indicador casa decimais contiver o caractere B, uma barra de controle deslizante será apresentada.
+    Se o indicador casa decimais contiver B, uma barra de controle deslizante será apresentada.
     Se o indicador B estiver acompanhado de R, o refresh será dinâmico.
 
     Exemplo:
@@ -825,9 +852,9 @@
       [TEXTO]: #Proprietário que contenha: TX-435: 50;U;[A-Z]|[0-9] : OT
 
     Uso de Múltiplas Linhas:
-    Para ser utilizado, deve-se utilizar um BEL logo após o label, seguido da altura, conforme a sintaxe abaixo:
+    Para ser utilizado, deve-se utilizar um BEL logo após o label, seguido da altura, conforme a sintaxe:
 
-      [PARAMETRO]: Label BEL Altura :  TX435: 50;U;[A-Z]|[0-9]
+      [PARAMETRO]: Label BEL Altura : TX435: 50;U;[A-Z]|[0-9]
 
     Para inserir uma nova linha na área de texto, usa-se Alt+Enter.
     Após a altura pode-se utilizar um N opcional para indicar que o TX não utilizará efetivamente a altura definida.
@@ -836,19 +863,41 @@
       [PARAMETRO]: Label BEL Altura BEL {background/foreground/fonte/estilo da fonte / tamanho}:  TX435: 50;U;[A-Z]|[0-9]
 
     Uso de Imagens no TX com Múltiplas Linhas:
-    O parâmetro tipo texto pode uma imagem, passada no default do parâmetro, seguindo a seguinte sintaxe:
+    Pode uma imagem, passada no default do parâmetro, seguindo a seguinte sintaxe:
 
       [PARAMETRO]:  Label {BEL} Altura : TX250 : 250: #IMG^Imagem^C-Com Borda ou S-Sem Borda^Cor_Fundo
 
     Uso de Gráficos no TX com Múltiplas Linhas:
-    O parâmetro tipo texto pode receber um gráfico, passado no default do parâmetro, seguindo a seguinte sintaxe:
+    Pode receber um gráfico, passado no default do parâmetro, seguindo a seguinte sintaxe:
 
       [PARAMETRO]:  Label {BEL} Altura : TX250 : 250: #IMG^GRF_TipoDoGráfico%Título%Notação específica do tipo
 
     Uso de Vídeos no TX com Múltiplas Linhas:
-    O parâmetro tipo texto pode receber um vídeo, passado no default do parâmetro, seguindo a seguinte sintaxe:
+    Pode receber um vídeo, passado no default do parâmetro, seguindo a seguinte sintaxe:
 
       [PARAMETRO]:  Label {BEL}  Altura : TX250 : 250: #IMG^Vídeo#
+    """
+
+  '@>RPA':
+    'prefix': 'rpacmd'
+    'body': '@>RPA\n${1:Script}\n$0'
+    'description': """
+    Executa script seguindo sintaxe do AutoHotKey.
+    No momento, o comando só está disponível para o sistema operacional Windows.
+    É possível passar parâmetros dentro de { }, separados por ; no início do script.
+
+    Parâmetros disponíveis:
+      • W - aguarda a execução;
+      • I - interrompe no caso de erro;
+      • L - limpa a otm_mensagem de acordo com o tipo passado;
+      • M:Mensagem de erro - no caso de erro, mostra a mensagem definida;
+      • T:tipo - no caso de erro, grava na otm_mensagem com o tipo definido.
+
+    Exemplo:
+      @>RPA
+      {W;I;L;M:Ocorreu um erro!;T:OTM_RPA}
+      ;Apresenta uma mensagem
+      msgbox, Mensagem de teste
     """
 
   '@>ARQ':
@@ -860,7 +909,7 @@
     Arquivo; Sessão; I/O; Mensagem; Tipo; Grava_Erro
 
     • I/O: I (input) lê o arquivo, O (output) grava o arquivo;
-    • Mensagem: SEM não mostra as possíveis mensagens de erro na tela, gravando-as em OTM_MENSAGEM;
+    • Mensagem: SEM não mostra as mensagens de erro na tela, gravando-as em OTM_MENSAGEM;
     • Tipo: Se passado (opcional) exporta apenas dados da sessão/tipo definido;
     • Grava_Erro: SIM grava os registros (na importação) mesmo que ocorra algum erro (com commit por registro).
                   NÃO (default) grava apenas se a importação ocorrer até o final, sem erros (sem commit por registro);
@@ -894,7 +943,7 @@
       • Destino: caminho e nome do arquivo/pasta destino (para ação Copiar e Mover);
       • Ação: indica a ação a ser realizada em origem (Copiar, Mover, Deletar ou Listar);
       • Interacao/Hidden: indica se haverá mensagem de interação com usuário caso arquivo destino já exista
-        (para ação Listar, indica se lista/exibe arquivos/pastas ocultas/sistema);
+        (para ação Listar, indica se lista arquivos/pastas ocultas/sistema);
       • Subpastas: indica se deve criar pastas destinos caso não existam
         (para ação Listar indica se deve listar conteúdo das subpastas);
       • Erros_na_Tela: indica se mensagens de erro devem ser apresentadas na tela (quando SIM, processo é interrompido).
@@ -902,6 +951,7 @@
 
     Mensagens de sucesso ou erro são armazenadas em OTM_MENSAGEM com tipo = 'DFM'.
     Na opção listar, a relação de arquivos/pastas será armazenada em OTM_MENSAGEM.
+    Caso seja necessário utilizar : no caminho de origem ou destino, deve-se usar @.
 
     Exemplo:
       [PLI]
@@ -920,6 +970,21 @@
     'body': '@>EML\n${1:ID}\n$0'
     'description': """
     Dispara e-mails (todos se ID=0 ou específico, conforme ID passado).
+    Para seu uso, é necessário que estejam configurados alguns parâmetros na tabela OTM_PARAMETROS.
+    O ID refere-se a um registro na tabela OTM_MAIL_CAB.
+
+    A tabela OTM_MAIL_CAB armazena as seguintes informações:
+      ID, descrição, usuário que criou, data da criação, data do envio, situação e mensagem de erro;
+      Para enviar um e-mail, precisa-se adicionar um registro com id, descrição, usuário que criou, data da criação e situação = 1 (a enviar);
+      A data do envio, situação e mensagem de erro serão atualizadas pela plataforma;
+      Situação igual a 2 indica um e-mail bem sucedido, e igual a 3 indica erro;
+      Caso ocorra erro, a última coluna será preenchida com o erro em questão.
+
+    A tabela OTM_MAIL_DET deve conter as informações do e-mail:
+      A coluna MAIL_CAB_ID referencia o registro da tabela OTM_MAIL_CAB para realizar o envio;
+      A coluna tag dita o elemento do e-mail (REMETENTE, DESTINO, ASSUNTO, CONTEUDO ou ANEXO, sendo o último opcional);
+      A coluna seq ordena as tags DESTINO, CONTEUDO e ANEXO;
+      A coluna conteudo contém o conteúdo de acordo com a tag utilizada.
 
     Exemplo:
       @>EML
@@ -932,13 +997,22 @@
     'description': """
     Permite a execução de um programa fora do ambiente da OTMSuite.
     Dois pontos é utilizado como : e não AQUI_TEM_DOIS_PONTOS.
-    Depois da aplicação é possível colocar {%}, o que faz com que o MKQ espere a execução da aplicação externa.
     Caso a aplicação utilize de parâmetros, o @ é o separador utilizado.
     Mesmo que o caminho da aplicação tenha espaços, não deve ir entre aspas.
 
+    É possível passar parâmetros dentro de { }, separados por ; no início do script.
+
+    Parâmetros disponíveis:
+      • W - aguarda a execução;
+      • I - interrompe no caso de erro;
+      • L - limpa a otm_mensagem de acordo com o tipo passado;
+      • M:Mensagem de erro - no caso de erro, mostra a mensagem definida;
+      • T:tipo - no caso de erro, grava na otm_mensagem com o tipo definido.
+
     Exemplo:
       @>EXE
-      [APL_A_EXECUTAR]
+      {W;I;L;M:Ocorreu um erro!;T:OTM_EXE}
+      C:/teste.exe
     """
 
   '@>MKP':
@@ -1012,16 +1086,31 @@
     'prefix': 'wsvcmd'
     'body': '@>WSV\n${1:Webservice A Executar}\n$0'
     'description': """
-    Permite a execução de um serviço.
+    Permite consumir de um web service. O retorno do web service será gravado na tabela OTM_DADOS_EXTERNOS com o tipo especificado e a sessão atual.
+    É possível parametrizar a chamada através da OTM_DADOS_EXTERNOS ou utilizando a seguinte sintaxe:
 
-    Exemplo:
-      @>WSV
-      -- Executa o serviço e em caso de algum erro encerra o MKQ
-      http://enderecodowebservice
+    +>TIP: TIPO (obrigatório)
+    +>URL: URL (obrigatório)
+    +>MET: Método (GET ou POST, default = POST)
+    +>CON: Conteúdo (Body)
+    +>CAB: Cabeçalho (Header)
+    +>SEG (Informa que, em caso de erro, não irá interromper a execução da tag PRE, PLI ou PLF e irá gravar o erro na OTM_MENSAGEM com o tipo WSV)
 
-      @>WSV
-      -- Executa o serviço e em caso de algum erro continua a execução do MKQ
-      #http://enderecodowebservice
+    Caso algum dos parâmetros, exceto o +>TIP e o +>SEG, não seja informado pelo @>WSV, o mesmo será buscado na OTM_DADOS_EXTERNOS.
+    Parâmetros informados na OTM_DADOS_EXTERNOS devem estar gravados na coluna CONTEUDO, estar na mesma sessão da OTMSuite, ter seu identificador na coluna arquivo (URL, MET, CON ou CAB) e ter o tipo especificado no comando WSV.
+
+    O cabeçalho do retorno do web service será gravado em ordem (conforme a coluna LIN) na coluna CONTEUDO, com ARQUIVO = CABECALHO.
+    O conteúdo/corpo também será gravado na coluna CONTEUDO, mas com ARQUIVO = CONTEUDO.
+
+    @>WSV
+    +>URL: https://viacep.com.br/ws/[PARCEP]/json/
+    +>MET: GET
+    +>TIP: BUSCA_CEP
+    +>SEG
+
+    [SQL]
+    select conteudo "Retorno" from otm_dados_externos where sessao = [SESSAO]
+    and tipo = 'BUSCA_CEP' and arquivo = 'CONTEUDO'
     """
 
   '@>WWW':
@@ -1056,10 +1145,12 @@
 
       <ARQ>Caminho do arquivo a ser gerado;
       <DAD>Os dados do gráfico
-      <GRF>Tipo do Gráfico (PIE, PIE3D, BARH, BAR, BAR3D, LINE, LINE3D,TERM ou DASH)
+      <GRF>Tipo do Gráfico (BAR, LIN, PIE, ARE, TER, GAU/DAS)
       <TIT>Título do Gráfico
       <COR>Cor de fundo do gráfico (R-G-B)
       <DIM>Dimensões da Imagem (largura , altura)
+
+      Para mais detalhes referentes à notação específica de cada tipo, verifique a documentação de MKPs.
 
       Exemplo
          @>GRF
@@ -1124,7 +1215,7 @@
     • Limites de condicional:
         As chamadas condicionais globais (resolvidas logo na primeira leitura do arquivo) são delimitadas por ##> <##
         As condicionais internas (resolvidas no início da execução de cada bloco) são delimitadas por #> <#
-    • Permite selecionar mais de um registro quando no PLE ou FK, por exemplo:
+    • Permite selecionar mais de um registro quando no PLE ou FK:
         *
     • Modificadores dos campos de parâmetro:
         #, -, @, $
@@ -1132,6 +1223,8 @@
         @S, @C, @A, @M, @N
     • Define que a célula não terá seu conteúdo editável e pode definir tooltip text:
         !!!
+    • Define que a célula não será navegável por enter/tab, exceto se vier de outra célula com @@@:
+        @@@
     • Tooltip e TX de múltiplas linhas:
         O BEL pode ser utilizado entre dois valores, em determinada célula do grid, para informar que ela terá tooltip.
           O primeiro valor será o conteúdo da célula e o segundo será o tooltip.
@@ -1149,7 +1242,7 @@
     'prefix': 'docpath'
     'body': ''
     'description': """
-    Existem alguns atalhos de caminhos que podem ser utilizados na plataforma OTMSuite em geral. São eles:
+    Existem alguns atalhos de caminhos que podem ser utilizados na plataforma OTMSuite. São eles:
     • %HOMEPATH%
     • %TEMP% (ou %TMP%)
 
@@ -1225,8 +1318,7 @@
     Para não definir uma cor para algum segmento específico, basta deixar vazio.
     A cor com @ define o default para os segmentos sem cor definida.
 
-    Temos alguns padrões de cores para uso no SVG.
-    Embora a sintaxe anterior continue valendo, para não termos que “decorar” os RGBs das cores normalmente usadas, criamos um “apelido” para algumas delas conforme:
+    Temos alguns padrões de cores para uso no SVG, conforme:
       PAD     assume a cor padrão da plataforma
       PTO     000-000-000
       BCO     250-250-250
@@ -1236,7 +1328,7 @@
       AMR     250-250-000
       VRM     250-000-000
 
-    Desta forma, podemos usar algo como %SVGI/md-water|VDE que a plataforma vai converter para o RGB referenciado.
+    Desta forma, podemos usar %SVGI/md-water|VDE e a plataforma vai converter para o RGB referenciado.
 
     Podemos também definir cor e espessura para as bordas de cada segmento do svg.
 
@@ -1244,14 +1336,14 @@
       #IMG^%SVGC/imagem|cor_preenchimento1/cor_borda1
 
     Note que o mesmo segmento da imagem tem sua cor de preenchimento definida, bem como a cor da borda. O separador para poder definir a borda é a barra.
-    A cor da borda é definida da mesma forma que a cor do preenchimento (RGBA), porém pode ter uma pequena diferença: podemos definir também, juntamente com a cor da borda, uma  espessura.
+    A cor da borda é definida da mesma forma que a cor do preenchimento (RGBA), porém pode ter uma pequena diferença: podemos definir também, juntamente com a cor da borda, uma espessura.
     Veja um exemplo com a diferença:
       Imagem|255-0-0-255/220-220-220-255-10
 
-    No exemplo acima tanto a cor do preenchimento como da borda são totalmente visíveis (quarto valor = 255), mas na borda ainda temos o valor 10 que se refere à espessura da borda.
+    No exemplo acima tanto a cor do preenchimento como da borda são totalmente visíveis (quarto valor = 255), mas na borda ainda temos o valor 10 que se refere à espessura.
 
     Observações:
-      • Não é necessário definir um preenchimento para que a borda seja definida, podemos deixar o preenchimento padrão e alterar somente as propriedades da borda.
+      • Não é necessário definir um preenchimento para que a borda seja definida, podemos deixar o preenchimento padrão e alterar somente as propriedades.
       • Não é necessário definir a opacidade para definir a cor ou mesmo a espessura.
     """
 
@@ -1259,11 +1351,11 @@
     'prefix': 'docreserv'
     'body': '$0'
     'description': """
-    A OTMSuite possui algumas palavras (variáveis) reservadas utilizados em vários contextos.
+    A OTMSuite possui algumas palavras (variáveis) reservadas utilizadas em vários contextos.
 
     CTRL_V      HIDDEN
     #INCLUDE    #SELECT
-    ##POS##
+    ##POS##     [$DEBUG$]
     [$COL$]     [$COLNAME$]
     [$CELL$]    [$LIN$]
     [$POPUP$]   [$BARRA$]
@@ -1272,6 +1364,18 @@
     BEL         EOT
     AQUI_TEM_DOIS_PONTOS
     AQUI_TEM_PONTO_VIRG
+    """
+
+  '#INCLUDE':
+    'prefix': 'incl'
+    'body': '#INCLUDE $0'
+    'description': """
+    Ao iniciar uma linha do MKQ com #INCLUDE, pode-se passar o nome de um MKQ para ser
+    incluído dentro do atual, executando o seu conteúdo.
+    O MKQ a ser incluído precisa estar na pasta Queries/includes.
+
+    Exemplo:
+      #INCLUDE cria_db
     """
 
     # Snippets Oracle
