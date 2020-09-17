@@ -312,6 +312,10 @@
     Seu conteúdo secundário (Texto), obtido através de {[OPC]}, é equivalente ao label do botão clicado.
 
     Se o identificador for CTRL_V, a opção de colar será habilitada no grid (embora nenhum botão adicional seja apresentado).
+    Ao pressionar Control + V no grid, o conteúdo da área de transferência será gravado na OTM_DADOS_EXTERNOS, com a sessão atual e ARQUIVO = CTRL_V.
+    A primeira linha gravada conterá a linha e a coluna do grid selecionadas.
+    Caso o conteúdo da área de transferência possua mais de uma linha, o seu conteúdo será gravado em mais de um registro (separados por nova linha).
+
     É possível definir a localização dos botões com as palavras reservadas [$BARRA$] e [$POPUP$].
     A palavra reservada [$BARRA$] na validação do botão, quando usada sozinha, faz com que o botão apareça somente na barra de busca do grid.
     Já a [$POPUP$] por sua vez, faz com que seja visível no botão direito do mouse.
