@@ -395,7 +395,7 @@
     • Z: indica se deve ou não zebrar as linhas do relatório
     • F: define fonte dos dados do relatório (se alguma célula possuir definição de fonte, será respeitada a definição)
     • H: indica se altura da linha deve ser automática (auto-ajustada) ou se deve obedecer a altura definida na tabela de dados
-    • V: apenas gera o arquivo PDF na área temporária do usuário, sem exibir o mesmo na tela
+    • V: indica se, além de gerar na área temporária, deve exibir o mesmo na tela
 
     Exemplo:
       [PDF]
@@ -407,6 +407,7 @@
       M:7/7/0/10
       Z:Não zebrar
       H:Auto ajuste
+      V:Não exibir
     """
 
   '[PLE]':
