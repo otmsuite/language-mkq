@@ -575,6 +575,7 @@
     Este comando permite dividir o bloco SQL em dois grids distintos (inclusive, com número de colunas distintas).
     O segundo bloco será apresentado em um grid acima do grid de dados.
     n define o número de linhas fixas no grid. Default: 1.
+    Não é possível uso conjunto com colunas fixas ([DIM]).
 
     Exemplo:
     select rownum "Cod#10", 1 "Teste#N10@S", 'T'||rownum "Descrição#80"
