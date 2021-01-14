@@ -203,7 +203,7 @@
 
   '[GRD]':
     'prefix': 'grd'
-    'body': '[GRD]\n${1:[OC]:}\n${2:[FL]: N}\n[FC]:${3:Tahoma}-${4:0}-${5:12}\n[FT]:${3:Tahoma}-${4:0}-${5:12}\n${6:[1]: Itens}\n$0'
+    'body': '[GRD]\n${1:[OC]:}\n${2:[FL]: N}\n[FC]:${3:Noto Sans}-${4:0}-${5:12}\n[FT]:${3:Noto Sans}-${4:0}-${5:12}\n${6:[1]: Itens}\n$0'
     'description': """
     Esta tag permite redefinir diversas configurações do grid e definir agrupamentos no cabeçalho.
 
@@ -214,7 +214,7 @@
       • F - oculta os botões de filtrar
     A subtag [FL] permite realizar buscas em colunas ocultas caso seu conteúdo comece com S (o padrão é somente em colunas visíveis).
     As subtags [FT] e [FC] permitem definir as fontes a serem utilizadas para o cabeçalho do grid de dados (tag [SQL]) e do grid de cabeçalho (comando UNION_TABLE da tag [SQL]).
-    Caso a fonte não seja não definida, o padrão assumido será Tahoma-0-12.
+    Caso a fonte não seja não definida, o padrão assumido será Noto Sans-0-12.
     As subtags de fontes seguem o padrão Nome da fonte-Tipo (0=Normal, 1=Negrito, 2=Itálico, 3=Ambos)-Tamanho.
     Para utilizar cabeçalhos com múltiplas linhas (agrupamento), define-se uma tag que será utilizada no início do nome da coluna do grid, seguido de : e o nome do agrupamento a ser utilizado.
 
@@ -383,7 +383,7 @@
 
   '[PDF]':
     'prefix': 'pdf'
-    'body': '[PDF]\n${1:C:{X-X-X/31-73-125/Tahoma/1/10\\}}\n${2:R:{X-X-X/31-73-125/Tahoma/2/8\\}}\n${3:F:{X-X-X/31-73-125/Tahoma/2/8\\}}\n${4:S:210/297}\n${5:O:Retrato}\n${6:M:7/7/0/10}\n${7:Z:Zebrar}\n${8:H:Auto ajuste}\n$0'
+    'body': '[PDF]\n${1:C:{X-X-X/31-73-125/Noto Sans/1/10\\}}\n${2:R:{X-X-X/31-73-125/Noto Sans/2/8\\}}\n${3:F:{X-X-X/31-73-125/Noto Sans/2/8\\}}\n${4:S:210/297}\n${5:O:Retrato}\n${6:M:7/7/0/10}\n${7:Z:Zebrar}\n${8:H:Auto ajuste}\n$0'
     'description': """
     Permite estabelecer definições para a geração do arquivo PDF. Se não informado, definições padrões serão assumidas.
     As seguintes definições podem ser estabelecidas nesta tag:
@@ -399,9 +399,9 @@
 
     Exemplo:
       [PDF]
-      C:{X-X-X/31-73-125/Tahoma/1/10}
-      R:{X-X-X/31-73-125/Tahoma/2/8}
-      F:{X-X-X/31-73-125/Tahoma/0/8}
+      C:{X-X-X/31-73-125/Noto Sans/1/10}
+      R:{X-X-X/31-73-125/Noto Sans/2/8}
+      F:{X-X-X/31-73-125/Noto Sans/0/8}
       S:210/297
       O:Retrato
       M:7/7/0/10
@@ -501,7 +501,7 @@
     Para isso, concatena-se um chr(12) na primeira célula visível da linha que irá para a próxima página.
 
     Também é possível reiniciar a contagem de paginação.
-    Para isso, concatena-se um chr(12) seguido de um @ na primeira célula <b>visível</b> da linha que irá para a próxima página.
+    Para isso, concatena-se um chr(12) seguido de um @ na primeira célula visível da linha que irá para a próxima página.
 
     Exemplo:
       [SQE]
@@ -591,11 +591,11 @@
 
     Formatação de célula:
     O padrão utilizado para background é RGB 254-254-254 (lembrando que temos linhas alternadas em 231-238-245) e para foreground 31-73-125.
-    A fonte padrão é Tahoma normal size 12.
+    A fonte padrão é Noto Sans normal size 12.
     Para alterar a cor/fonte de uma célula, basta preceder o conteúdo conforme a sintaxe {RB-GB-BB/RF-GF-BF/Fonte/Tipo/Tamanho}, onde
     RB-GB-BB equivale ao RGB da cor para background, como por exemplo, 255-255-0 (amarelo). Se RB-GB-BB for igual a X-X-X será adotado o padrão;
     RF-GF-BF equivale ao RGB da cor para foreground, como por exemplo, 150-75-0 (marrom). Se RF-GF-BF for igual a X-X-X será adotado o padrão;
-    A Fonte deve estar instalada na máquina.
+    A Fonte deve estar cadastrada no mapeamento de fontes (ou instalada na máquina)
     Tipo refere-se à fonte: 0-normal, 1-negrito, 2-itálico, 3-itálico+negrito
     Tamanho é size da fonte
     Se a string de formatação estiver dentro de chaves duplas, a definição será aplicada para a linha
@@ -615,7 +615,6 @@
     Sintaxe: ID "(!)Selecionados#5"
 
     Os registros serão gravados na OTM_MENSAGEM com a sessão atual, TIPO igual ao nome da coluna e MSG igual ao conteúdo da coluna.
-    Seguindo o exemplo, MSG conteria o ID do registro selecionado e o TIPO seria igual a "Selecionados"
 
     Caso utilizado em conjunto de um PLE permitindo seleção múltipla, serão habilitados dois botões no GRID (para selecionar e deselecionar os registros).
     """
@@ -1204,12 +1203,12 @@
 
   'Formatação Célula':
     'prefix': 'format'
-    'body': '{${1:X-X-X}/${2:X-X-X}/${3:Tahoma}-${4:0}-${5:12}${6:/H25}\\}$0'
+    'body': '{${1:X-X-X}/${2:X-X-X}/${3:Noto Sans}-${4:0}-${5:12}${6:/H25}\\}$0'
     'description': 'Formatação para células do grid\n{Cor Background/Cor Foreground/Fonte-Estilo-Tamanho/Altura Linha}'
 
   'Formatação Linha':
     'prefix': 'formatl'
-    'body': '{{${1:X-X-X}/${2:X-X-X}/${3:Tahoma}-${4:0}-${5:12}${6:/H25}\\}\\}$0'
+    'body': '{{${1:X-X-X}/${2:X-X-X}/${3:Noto Sans}-${4:0}-${5:12}${6:/H25}\\}\\}$0'
     'description': 'Formatação para linhas do grid\n{Cor Background/Cor Foreground/Fonte-Estilo-Tamanho/Altura Linha}'
 
   'Operadores':
@@ -1301,20 +1300,20 @@
 
     Para facilitar seu uso, pode-se utilizar de abreviações para acessar as pastas:
       PNGs/GIFs
-      %C = /Images/Cliente
-      %D = /Images/Otimiza/Diversos
-      %L = /Images/Otimiza/Letras
-      %P = /Imagem/Otimiza/Padrao
-      %S = /Imagem/Otimiza/System
+      %C = /images/cliente
+      %D = /images/otimiza/diversos
+      %L = /images/otimiza/letras
+      %P = /imagem/otimiza/padrao
+      %S = /imagem/otimiza/system
 
       SVGs
-      %SVGC = /Images/Cliente/SVG
-      %SVGL = /Images/Otimiza/SVG/Letras
-      %SVGD = /Images/Otimiza/SVG/Diversos
-      %SVGP = /Images/Otimiza/SVG/Padrao
-      %SVGS = /Images/Otimiza/SVG/System
-      %SVGI = /Images/Otimiza/SVG/ionicons
-      %SVGF = /Images/Otimiza/SVG/fontawesome
+      %SVGC = /images/cliente/svg
+      %SVGL = /images/cliente/svg/letras
+      %SVGD = /images/cliente/svg/diversos
+      %SVGP = /images/cliente/svg/padrao
+      %SVGS = /images/cliente/svg/system
+      %SVGI = /images/cliente/svg/ionicons
+      %SVGF = /images/cliente/svg/fontawesome
 
     Imagens SVG podem receber cores no formato RGBA como parâmetro:
       %SVGI/logo-buffer|@61-84-34-255|d|139-175-169-255
@@ -1351,6 +1350,12 @@
     Observações:
       • Não é necessário definir um preenchimento para que a borda seja definida, podemos deixar o preenchimento padrão e alterar somente as propriedades.
       • Não é necessário definir a opacidade para definir a cor ou mesmo a espessura.
+
+    QR CODE
+
+    Para gerar um QR Code, o nome da imagem deve terminar com .qr, seguido de um | e o conteúdo para o mesmo. Exemplo:
+
+    #IMG^qrcode.qr|Meu QR Code^350^350
     """
 
   'Reservadas':
