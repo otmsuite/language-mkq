@@ -1356,6 +1356,12 @@
     Para gerar um QR Code, o nome da imagem deve terminar com .qr, seguido de um | e o conteúdo para o mesmo. Exemplo:
 
     #IMG^qrcode.qr|Meu QR Code^350^350
+
+    Data Matrix
+
+    Para gerar uma Data Matrix, o nome da imagem deve terminar com .dm, seguido de um | e o conteúdo para a mesma. Exemplo:
+
+    #IMG^datamatrix.dm|Minha Data Matrix Code^350^350
     """
 
   'Reservadas':
