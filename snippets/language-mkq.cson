@@ -1361,7 +1361,7 @@
 
     Para gerar uma Data Matrix, o nome da imagem deve terminar com .dm, seguido de um | e o conteúdo para a mesma. Exemplo:
 
-    #IMG^datamatrix.dm|Minha Data Matrix Code^350^350
+    #IMG^datamatrix.dm|Minha Data Matrix^350^350
     """
 
   'Reservadas':
