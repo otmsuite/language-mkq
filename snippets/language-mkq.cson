@@ -1235,7 +1235,7 @@
           O primeiro valor será o conteúdo da célula e o segundo será o tooltip.
         O BEL pode ser utilizado no label do TX para definir que o mesmo será de múltiplas linhas (caixa de texto).
     • Chamadas de MKQ
-        !, +, -, #
+        *, +, -, #, $
     • Separador utilizado em FK e REFRESH
         chr(9)
     • Estrutura de tópicos
