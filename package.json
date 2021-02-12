@@ -1,7 +1,7 @@
 {
   "name": "language-mkq",
   "main": "./lib/language-mkq",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Um pacote voltado à linguagem de MKQs da OTMSuite",
   "keywords": [
     "MKQ",
