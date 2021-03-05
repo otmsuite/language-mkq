@@ -1103,9 +1103,14 @@
 
     Caso algum dos parâmetros, exceto o +>TIP e o +>SEG, não seja informado pelo @>WSV, o mesmo será buscado na OTM_DADOS_EXTERNOS.
     Parâmetros informados na OTM_DADOS_EXTERNOS devem estar gravados na coluna CONTEUDO, estar na mesma sessão da OTMSuite, ter seu identificador na coluna arquivo (URL, MET, CON ou CAB) e ter o tipo especificado no comando WSV.
+    O conteúdo do +>CAB deve seguir a sintaxe do exemplo abaixo:
+    {"Content-Type":"application/json"}
+    {"User-Agent":"OTMSuite Desktop application"}
+
 
     O cabeçalho do retorno do web service será gravado em ordem (conforme a coluna LIN) na coluna CONTEUDO, com ARQUIVO = CABECALHO.
-    O conteúdo/corpo também será gravado na coluna CONTEUDO, mas com ARQUIVO = CONTEUDO.
+    O conteúdo/corpo será gravado na coluna CONTEUDO, com ARQUIVO = CONTEUDO.
+    O código do retorno será gravado na coluna CONTEUDO, com ARQUIVO = CODIGO.
 
     @>WSV
     +>URL: https://viacep.com.br/ws/[PARCEP]/json/
